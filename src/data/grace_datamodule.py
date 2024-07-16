@@ -4,12 +4,14 @@ import os
 import numpy as np
 import pandas as pd
 import copy
+import glob
 
 import torch
 from lightning import LightningDataModule
 from torch.utils.data import TensorDataset, DataLoader, Dataset, random_split
 from torchvision.datasets import MNIST
 from torchvision.transforms import transforms
+from sklearn.model_selection import train_test_split
 
 
 class GraceDataModule(LightningDataModule):
@@ -52,8 +54,9 @@ class GraceDataModule(LightningDataModule):
 
     def __init__(
         self,
-        csv_fn: str,
-        data_dir: str = "data/",
+        data_dir: str = "20240715_032420_095729",
+        eye: str = "left",
+        val_size = 0.2,
         batch_size: int = 64,
         num_workers: int = 0,
         pin_memory: bool = False,
@@ -72,31 +75,27 @@ class GraceDataModule(LightningDataModule):
         # also ensures init params will be stored in ckpt
         self.save_hyperparameters(logger=False)
 
-        self.data_train, self.data_val = self.preprocess_csv(csv_fn)
+        self.val_size = val_size
+        self.data_train, self.data_val = self.preprocess_csv(data_dir, eye)
         self.data_test = copy.deepcopy(self.data_val)
-
         self.batch_size_per_device = batch_size
 
-    def preprocess_csv(self, csv_fn):
+    def preprocess_csv(self, data_dir, eye):
         # Read CSV
-        csv_path = os.path.join(os.getcwd(),'data',csv_fn)
-        df = pd.read_csv(csv_path)
-
-        # Unique Motor Commands
-        unq_theta_left_pan_cmd = df['theta_left_pan_cmd_tminus1'].unique()
-        unq_theta_tilt_cmd = df['theta_tilt_cmd_tminus1'].unique()
-
-        # Define the list of choices
-        val_theta_left_pan = [-14,-10,-6,-2, 2, 6, 10, 14]
-        train_theta_left_pan = sorted(list(set(unq_theta_left_pan_cmd) - set(val_theta_left_pan)))
-
-        # Separation of Training and Validation Set
-        train_df = df[df['theta_left_pan_cmd_tminus1'].isin(train_theta_left_pan)].reset_index(drop=True)
-        val_df = df[df['theta_left_pan_cmd_tminus1'].isin(val_theta_left_pan)].reset_index(drop=True)
+        files_path = os.path.join(os.getcwd(),'data', data_dir, f"*{eye}*.csv")
+        csv_files = glob.glob(files_path)
+        
+        dfs = []
+        for csv_file in csv_files:
+            temp_df = pd.read_csv(csv_file)
+            dfs.append(temp_df)
+        df = pd.concat(dfs, ignore_index=True)
 
         # Motor Command Conversion (deg -> rad)
-        train_df.iloc[:,3:8] = train_df.iloc[:,3:8].apply(np.radians)
-        val_df.iloc[:,3:8] = val_df.iloc[:,3:8].apply(np.radians)
+        df.iloc[:,3:8] = df.iloc[:,3:8].apply(np.radians)
+
+        # Separation of Training and Validation Set
+        train_df, val_df = train_test_split(df, test_size=self.val_size, random_state=None)
 
         # Training Set
         X_train = torch.tensor(train_df.iloc[:,:6].values, dtype=torch.float32)

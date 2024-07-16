@@ -1,6 +1,7 @@
 _target_: src.data.grace_datamodule.GraceDataModule
-csv_fn: "dataset_left_chest_20240627_162502_402545.csv"
-data_dir: ${paths.data_dir}
-batch_size: 32 # Needs to be divisible by the number of devices (e.g., if in a distributed setup)
+data_dir: "20240715_032420_095729"
+eye: "left"
+val_size: 0.2
+batch_size: 128 # Needs to be divisible by the number of devices (e.g., if in a distributed setup)
 num_workers: 15
 pin_memory: False
