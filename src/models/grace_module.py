@@ -43,14 +43,12 @@ class GraceLitModule(LightningModule):
         self,
         net: torch.nn.Module,
         optimizer: torch.optim.Optimizer,
-        scheduler: torch.optim.lr_scheduler,
         compile: bool,
     ) -> None:
         """Initialize a `MNISTLitModule`.
 
         :param net: The model to train.
         :param optimizer: The optimizer to use for training.
-        :param scheduler: The learning rate scheduler to use for training.
         """
         super().__init__()
 
@@ -188,19 +186,8 @@ class GraceLitModule(LightningModule):
         :return: A dict containing the configured optimizers and learning-rate schedulers to be used for training.
         """
         optimizer = self.hparams.optimizer(params=self.trainer.model.parameters())
-        if self.hparams.scheduler is not None:
-            scheduler = self.hparams.scheduler(optimizer=optimizer)
-            return {
-                "optimizer": optimizer,
-                "lr_scheduler": {
-                    "scheduler": scheduler,
-                    "monitor": "val/loss",
-                    "interval": "epoch",
-                    "frequency": 1,
-                },
-            }
         return {"optimizer": optimizer}
 
 
 if __name__ == "__main__":
-    _ = GraceLitModule(None, None, None, None)
+    _ = GraceLitModule(None, None, None)
