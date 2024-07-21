@@ -8,9 +8,9 @@ class SimpleDenseNet(nn.Module):
     def __init__(
         self,
         input_size: int = 6,
-        lin1_size: int = 256,
-        lin2_size: int = 256,
-        lin3_size: int = 256,
+        lin1_size: int = 64,
+        lin2_size: int = 64,
+        lin3_size: int = 64,
         output_size: int = 2,
     ) -> None:
         """Initialize a `SimpleDenseNet` module.
