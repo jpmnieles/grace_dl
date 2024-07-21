@@ -97,11 +97,11 @@ class GraceDataModule(LightningDataModule):
             'y_c': (-1.1516, 1.1516),
             'z_c': (0.3, 3.0),
             'cmd_theta_lower_neck_pan': (-40, 40),
-            'cmd_theta_lower_neck_tilt': (-13, 31),
-            'cmd_theta_upper_neck_tilt': (-13, 44),
+            'cmd_theta_lower_neck_tilt': (-31, 31),  # Original Range: (-13, 31)
+            'cmd_theta_upper_neck_tilt': (-44, 44),  # Original Range: (-13, 44)
             'cmd_theta_left_eye': (-18, 18),
             'cmd_theta_right_eye': (-18, 18),
-            'cmd_theta_tilt': (-31, 22),
+            'cmd_theta_tilt': (-31, 31),  # Original Range: (-31, 22)
         }
 
         # Create the scaled DataFrame
