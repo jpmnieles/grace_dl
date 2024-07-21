@@ -9,10 +9,10 @@ optimizer:
 net:
   _target_: src.models.components.simple_dense_net.SimpleDenseNet
   input_size: 6
-  lin1_size: 64
-  lin2_size: 64
-  lin3_size: 64
   output_size: 2
+  hidden_size: 1
+  hidden_nodes: 32
+  
 
 # compile model for faster training with pytorch 2.0
 compile: false
