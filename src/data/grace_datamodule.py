@@ -91,11 +91,27 @@ class GraceDataModule(LightningDataModule):
             dfs.append(temp_df)
         df = pd.concat(dfs, ignore_index=True)
 
-        # Motor Command Conversion (deg -> rad)
-        df.iloc[:,3:8] = df.iloc[:,3:8].apply(np.radians)
+        # Minmax Feature Scaler
+        feature_ranges = {
+            'x_c': (-2.0618, 2.0618),
+            'y_c': (-1.1516, 1.1516),
+            'z_c': (0.3, 3.0),
+            'cmd_theta_lower_neck_pan': (-40, 40),
+            'cmd_theta_lower_neck_tilt': (-13, 31),
+            'cmd_theta_upper_neck_tilt': (-13, 44),
+            'cmd_theta_left_eye': (-18, 18),
+            'cmd_theta_right_eye': (-18, 18),
+            'cmd_theta_tilt': (-31, 22),
+        }
+
+        # Create the scaled DataFrame
+        scaled_df = df.copy()
+        for col in df.columns[:8]:
+            col_min, col_max = feature_ranges[col]
+            scaled_df[col] = 2 * (df[col] - col_min) / (col_max - col_min) - 1
 
         # Separation of Training and Validation Set
-        train_df, val_df = train_test_split(df, test_size=self.val_size, random_state=None)
+        train_df, val_df = train_test_split(scaled_df, test_size=self.val_size, random_state=None)
 
         # Training Set
         X_train = torch.tensor(train_df.iloc[:,:6].values, dtype=torch.float32)
