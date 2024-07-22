@@ -2,8 +2,22 @@ from typing import Any, Dict, Tuple
 
 import torch
 from lightning import LightningModule
-from torchmetrics import MinMetric, MeanMetric
-from torch.nn.functional import mse_loss
+from torchmetrics import MinMetric, MeanMetric, MeanSquaredError
+from torch.nn.functional import mse_loss, huber_loss
+
+
+MAX_VALUE = 44
+
+
+class RMSELoss(torch.nn.Module):
+    def __init__(self, eps=1e-8):
+        super().__init__()
+        self.mse = mse_loss
+        self.eps = eps
+        
+    def forward(self,yhat,y):
+        loss = torch.sqrt(self.mse(yhat,y) + self.eps)
+        return loss
 
 
 class GraceLitModule(LightningModule):
@@ -59,15 +73,22 @@ class GraceLitModule(LightningModule):
         self.net = net
 
         # loss function
-        self.criterion = mse_loss
+        rmse_loss = RMSELoss(eps=1e-8)
+        self.criterion = huber_loss
 
         # for averaging loss across batches
         self.train_loss = MeanMetric()
         self.val_loss = MeanMetric()
         self.test_loss = MeanMetric()
 
+        # for tracking rmse
+        self.train_rmse =  MeanSquaredError(squared=False)
+        self.val_rmse =  MeanSquaredError(squared=False)
+        self.test_rmse = MeanSquaredError(squared=False)
+        
         # for tracking best so far validation accuracy
         self.val_loss_best = MinMetric()
+        self.val_rmse_best = MinMetric()
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         """Perform a forward pass through the model `self.net`.
@@ -81,8 +102,13 @@ class GraceLitModule(LightningModule):
         """Lightning hook that is called when training begins."""
         # by default lightning executes validation step sanity checks before training starts,
         # so it's worth to make sure validation metrics don't store results from these checks
+        self.train_loss.reset()
+        self.train_rmse.reset()
         self.val_loss.reset()
+        self.val_rmse.reset()
         self.val_loss_best.reset()
+        self.val_rmse_best.reset()
+        self.test_rmse.reset()
 
     def model_step(
         self, batch: Tuple[torch.Tensor, torch.Tensor]
@@ -117,12 +143,16 @@ class GraceLitModule(LightningModule):
         self.train_loss(loss)
         self.log("train/loss", self.train_loss, on_step=False, on_epoch=True, prog_bar=True)
 
+        # RMSE calculation
+        self.train_rmse(preds, targets)
+
         # return loss or backpropagation will fail
         return loss
 
     def on_train_epoch_end(self) -> None:
         "Lightning hook that is called when a training epoch ends."
-        pass
+        self.log("train/rmse", MAX_VALUE*self.train_rmse.compute(), prog_bar=True)
+        self.train_rmse.reset()
 
     def validation_step(self, batch: Tuple[torch.Tensor, torch.Tensor], batch_idx: int) -> None:
         """Perform a single validation step on a batch of data from the validation set.
@@ -137,6 +167,8 @@ class GraceLitModule(LightningModule):
         self.val_loss(loss)
         self.log("val/loss", self.val_loss, on_step=False, on_epoch=True, prog_bar=True)
 
+        # RMSE calculation
+        self.val_rmse(preds, targets)
 
     def on_validation_epoch_end(self) -> None:
         "Lightning hook that is called when a validation epoch ends."
@@ -146,6 +178,11 @@ class GraceLitModule(LightningModule):
         # otherwise metric would be reset by lightning after each epoch
         self.log("val/loss_best", self.val_loss_best.compute(), sync_dist=True, prog_bar=True)
 
+        rmse = MAX_VALUE*self.val_rmse.compute()
+        self.val_rmse_best(rmse)
+        self.log("val/rmse", rmse, prog_bar=True)
+        self.log("val/rmse_best", self.val_rmse_best.compute(), prog_bar=True)
+        self.val_rmse.reset()
 
     def test_step(self, batch: Tuple[torch.Tensor, torch.Tensor], batch_idx: int) -> None:
         """Perform a single test step on a batch of data from the test set.
@@ -160,9 +197,12 @@ class GraceLitModule(LightningModule):
         self.test_loss(loss)
         self.log("test/loss", self.test_loss, on_step=False, on_epoch=True, prog_bar=True)
 
+        # RMSE calculation
+        self.test_rmse(preds, targets)
+
     def on_test_epoch_end(self) -> None:
         """Lightning hook that is called when a test epoch ends."""
-        pass
+        self.log("test/rmse", MAX_VALUE*self.test_rmse.compute(), prog_bar=True)
 
     def setup(self, stage: str) -> None:
         """Lightning hook that is called at the beginning of fit (train + validate), validate,
