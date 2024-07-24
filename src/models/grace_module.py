@@ -1,4 +1,8 @@
 from typing import Any, Dict, Tuple
+import os
+
+import numpy as np
+import pandas as pd
 
 import torch
 from lightning import LightningModule
@@ -65,7 +69,7 @@ class GraceLitModule(LightningModule):
         self.net = net
 
         # loss function
-        wing_loss = WingLoss(omega=5, epsilon=1)
+        wing_loss = WingLoss(omega=1, epsilon=0.5)
         self.criterion = wing_loss
 
         # for averaging loss across batches
@@ -81,6 +85,10 @@ class GraceLitModule(LightningModule):
         # for tracking best so far validation accuracy
         self.val_loss_best = MinMetric()
         self.val_rmse_best = MinMetric()
+
+        # test placeholder
+        self._test_preds = []
+        self._test_targets = []
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         """Perform a forward pass through the model `self.net`.
@@ -185,6 +193,10 @@ class GraceLitModule(LightningModule):
         """
         loss, preds, targets = self.model_step(batch)
 
+        # list append
+        self._test_preds.append(preds.detach().cpu().numpy())
+        self._test_targets.append(targets.detach().cpu().numpy())
+
         # update and log metrics
         self.test_loss(loss)
         self.log("test/loss", self.test_loss, on_step=False, on_epoch=True, prog_bar=True)
@@ -195,6 +207,31 @@ class GraceLitModule(LightningModule):
     def on_test_epoch_end(self) -> None:
         """Lightning hook that is called when a test epoch ends."""
         self.log("test/rmse", MAX_VALUE*self.test_rmse.compute(), prog_bar=True)
+        
+        # Saving the CSV for analysis
+        preds_arr = np.concatenate(self._test_preds, axis=0)
+        targets_arr = np.concatenate(self._test_targets, axis=0)
+
+        df = pd.DataFrame({
+            'target_eye_pan': targets_arr[:,0],
+            'target_eye_tilt': targets_arr[:,1],
+            'pred_eye_pan': preds_arr[:,0],
+            'pred_eye_tilt': preds_arr[:,1],
+        })
+        
+        df['deg_target_eye_pan'] = MAX_VALUE*df['target_eye_pan'].values
+        df['deg_target_eye_tilt'] = MAX_VALUE*df['target_eye_tilt'].values
+        df['deg_pred_eye_pan'] = MAX_VALUE*df['pred_eye_pan'].values
+        df['deg_pred_eye_tilt'] = MAX_VALUE*df['pred_eye_tilt'].values
+        
+        df['delta_eye_pan'] = df['target_eye_pan'].values - df['pred_eye_pan'].values
+        df['delta_eye_tilt'] = df['target_eye_tilt'].values - df['pred_eye_tilt'].values
+        df['delta_deg_eye_pan'] = df['deg_target_eye_pan'].values - df['deg_pred_eye_pan'].values
+        df['delta_deg_eye_tilt'] = df['deg_target_eye_tilt'].values - df['deg_pred_eye_tilt'].values
+
+        csv_path = os.path.join(self.trainer.log_dir,'delta_output_analysis.csv')
+        df.to_csv(csv_path, index=False)
+        print('Saved CSV to:', csv_path)
 
     def setup(self, stage: str) -> None:
         """Lightning hook that is called at the beginning of fit (train + validate), validate,
