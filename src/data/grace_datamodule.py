@@ -104,11 +104,15 @@ class GraceDataModule(LightningDataModule):
             'cmd_theta_tilt': (-44, 44),  # Original Range: (-31, 22)
         }
 
+        # Filtered df
+        filtered_df = df[~df.isin([-100.0]).any(axis=1)]
+        filtered_df = filtered_df.reset_index(drop=True)
+
         # Create the scaled DataFrame
-        scaled_df = df.copy()
-        for col in df.columns[:8]:
+        scaled_df = filtered_df.copy()
+        for col in filtered_df.columns[:8]:
             col_min, col_max = feature_ranges[col]
-            scaled_df[col] = 2 * (df[col] - col_min) / (col_max - col_min) - 1
+            scaled_df[col] = 2 * (filtered_df[col] - col_min) / (col_max - col_min) - 1
 
         # Separation of Training and Validation Set
         train_df, val_df = train_test_split(scaled_df, test_size=self.val_size, random_state=None)
