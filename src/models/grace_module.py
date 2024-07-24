@@ -13,7 +13,8 @@ from src.models.components.wing_loss import WingLoss
 from src.models.components.rmse_loss import RMSELoss
 
 
-MAX_VALUE = 44
+MAX_METER_VALUE = 3
+MAX_DEG_VALUE = 44
 
 
 class GraceLitModule(LightningModule):
@@ -87,6 +88,7 @@ class GraceLitModule(LightningModule):
         self.val_rmse_best = MinMetric()
 
         # test placeholder
+        self._test_inputs = []
         self._test_preds = []
         self._test_targets = []
 
@@ -151,7 +153,7 @@ class GraceLitModule(LightningModule):
 
     def on_train_epoch_end(self) -> None:
         "Lightning hook that is called when a training epoch ends."
-        self.log("train/rmse", MAX_VALUE*self.train_rmse.compute(), prog_bar=True)
+        self.log("train/rmse", MAX_DEG_VALUE*self.train_rmse.compute(), prog_bar=True)
         self.train_rmse.reset()
 
     def validation_step(self, batch: Tuple[torch.Tensor, torch.Tensor], batch_idx: int) -> None:
@@ -178,7 +180,7 @@ class GraceLitModule(LightningModule):
         # otherwise metric would be reset by lightning after each epoch
         self.log("val/loss_best", self.val_loss_best.compute(), sync_dist=True, prog_bar=True)
 
-        rmse = MAX_VALUE*self.val_rmse.compute()
+        rmse = MAX_DEG_VALUE*self.val_rmse.compute()
         self.val_rmse_best(rmse)
         self.log("val/rmse", rmse, prog_bar=True)
         self.log("val/rmse_best", self.val_rmse_best.compute(), prog_bar=True)
@@ -194,6 +196,8 @@ class GraceLitModule(LightningModule):
         loss, preds, targets = self.model_step(batch)
 
         # list append
+        x, _ = batch
+        self._test_inputs.append(x.detach().cpu().numpy())
         self._test_preds.append(preds.detach().cpu().numpy())
         self._test_targets.append(targets.detach().cpu().numpy())
 
@@ -206,26 +210,26 @@ class GraceLitModule(LightningModule):
 
     def on_test_epoch_end(self) -> None:
         """Lightning hook that is called when a test epoch ends."""
-        self.log("test/rmse", MAX_VALUE*self.test_rmse.compute(), prog_bar=True)
+        self.log("test/rmse", MAX_DEG_VALUE*self.test_rmse.compute(), prog_bar=True)
         
         # Saving the CSV for analysis
+        inputs_arr = np.concatenate(self._test_inputs, axis=0)
         preds_arr = np.concatenate(self._test_preds, axis=0)
         targets_arr = np.concatenate(self._test_targets, axis=0)
 
         df = pd.DataFrame({
-            'target_eye_pan': targets_arr[:,0],
-            'target_eye_tilt': targets_arr[:,1],
-            'pred_eye_pan': preds_arr[:,0],
-            'pred_eye_tilt': preds_arr[:,1],
+            'meter_x_c': MAX_METER_VALUE*inputs_arr[:,0],
+            'meter_y_c': MAX_METER_VALUE*inputs_arr[:,1],
+            'meter_z_c': MAX_METER_VALUE*inputs_arr[:,2],
+            'deg_theta_lower_neck_pan': MAX_DEG_VALUE*inputs_arr[:,3],
+            'deg_theta_lower_neck_tilt': MAX_DEG_VALUE*inputs_arr[:,4],
+            'deg_theta_upper_neck_tilt': MAX_DEG_VALUE*inputs_arr[:,5], 
+            'deg_target_eye_pan': MAX_DEG_VALUE*targets_arr[:,0],
+            'deg_target_eye_tilt': MAX_DEG_VALUE*targets_arr[:,1],
+            'deg_pred_eye_pan': MAX_DEG_VALUE*preds_arr[:,0],
+            'deg_pred_eye_tilt': MAX_DEG_VALUE*preds_arr[:,1],
         })
         
-        df['deg_target_eye_pan'] = MAX_VALUE*df['target_eye_pan'].values
-        df['deg_target_eye_tilt'] = MAX_VALUE*df['target_eye_tilt'].values
-        df['deg_pred_eye_pan'] = MAX_VALUE*df['pred_eye_pan'].values
-        df['deg_pred_eye_tilt'] = MAX_VALUE*df['pred_eye_tilt'].values
-        
-        df['delta_eye_pan'] = df['target_eye_pan'].values - df['pred_eye_pan'].values
-        df['delta_eye_tilt'] = df['target_eye_tilt'].values - df['pred_eye_tilt'].values
         df['delta_deg_eye_pan'] = df['deg_target_eye_pan'].values - df['deg_pred_eye_pan'].values
         df['delta_deg_eye_tilt'] = df['deg_target_eye_tilt'].values - df['deg_pred_eye_tilt'].values
 
