@@ -6,20 +6,10 @@ from torchmetrics import MinMetric, MeanMetric, MeanSquaredError
 from torch.nn.functional import mse_loss, huber_loss
 
 from src.models.components.wing_loss import WingLoss
+from src.models.components.rmse_loss import RMSELoss
 
 
 MAX_VALUE = 44
-
-
-class RMSELoss(torch.nn.Module):
-    def __init__(self, eps=1e-8):
-        super().__init__()
-        self.mse = mse_loss
-        self.eps = eps
-        
-    def forward(self,yhat,y):
-        loss = torch.sqrt(self.mse(yhat,y) + self.eps)
-        return loss
 
 
 class GraceLitModule(LightningModule):
@@ -75,7 +65,6 @@ class GraceLitModule(LightningModule):
         self.net = net
 
         # loss function
-        rmse_loss = RMSELoss(eps=1e-8)
         wing_loss = WingLoss(omega=5, epsilon=1)
         self.criterion = wing_loss
 
