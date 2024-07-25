@@ -10,7 +10,7 @@ class SimpleDenseNet(nn.Module):
         input_size: int = 6,
         output_size: int = 2,
         hidden_size: int = 3,
-        hidden_nodes: int = 512
+        hidden_nodes: int = 256
     ) -> None:
         """Initialize a `SimpleDenseNet` module.
 

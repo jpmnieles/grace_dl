@@ -11,7 +11,7 @@ net:
   input_size: 6
   output_size: 2
   hidden_size: 3
-  hidden_nodes: 512
+  hidden_nodes: 256
   
 
 # compile model for faster training with pytorch 2.0
