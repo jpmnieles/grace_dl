@@ -71,7 +71,7 @@ class GraceLitModule(LightningModule):
 
         # loss function
         wing_loss = WingLoss(omega=1, epsilon=0.5)
-        self.criterion = wing_loss
+        self.criterion = mse_loss
 
         # for averaging loss across batches
         self.train_loss = MeanMetric()
