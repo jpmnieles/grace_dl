@@ -10,8 +10,8 @@ net:
   _target_: src.models.components.simple_dense_net.SimpleDenseNet
   input_size: 6
   output_size: 2
-  hidden_size: 2
-  hidden_nodes: 128
+  hidden_size: 3
+  hidden_nodes: 512
   
 
 # compile model for faster training with pytorch 2.0
