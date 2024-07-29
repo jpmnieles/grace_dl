@@ -28,12 +28,14 @@ class SimpleDenseNet(nn.Module):
         # Input layer
         layers.append(nn.Linear(input_size, hidden_nodes))
         layers.append(nn.ReLU())
+        layers.append(nn.Dropout(0.2))
         
         # Hidden layers
         if hidden_size > 1:
             for i in range(1, hidden_size):
                 layers.append(nn.Linear(hidden_nodes, hidden_nodes))
                 layers.append(nn.ReLU())
+                layers.append(nn.Dropout(0.2))
         
         # Output layer
         layers.append(nn.Linear(hidden_nodes, output_size))
