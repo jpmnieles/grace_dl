@@ -1,1 +1,1 @@
-python src/train.py task_name=try logger=tensorboard tags=["No_lr"] seed=12345
+python src/train.py task_name=hidden_exp data.batch_size=64 trainer.max_epochs=1000 model.optimizer.lr=0.0001 model.net.hidden_size=1,2,3 model.net.hidden_nodes=512,1024 logger=tensorboard tags=["hidden_size_nodes_exp","batch64_lr0.0001_hidlyr1,2,3_hidnod512
