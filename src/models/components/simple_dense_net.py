@@ -10,7 +10,8 @@ class SimpleDenseNet(nn.Module):
         input_size: int = 6,
         output_size: int = 2,
         hidden_size: int = 3,
-        hidden_nodes: int = 256
+        hidden_nodes: int = 256,
+        dropout = 0.5
     ) -> None:
         """Initialize a `SimpleDenseNet` module.
 
@@ -28,14 +29,14 @@ class SimpleDenseNet(nn.Module):
         # Input layer
         layers.append(nn.Linear(input_size, hidden_nodes))
         layers.append(nn.ReLU())
-        layers.append(nn.Dropout(0.2))
+        layers.append(nn.Dropout(dropout))
         
         # Hidden layers
         if hidden_size > 1:
             for i in range(1, hidden_size):
                 layers.append(nn.Linear(hidden_nodes, hidden_nodes))
                 layers.append(nn.ReLU())
-                layers.append(nn.Dropout(0.2))
+                layers.append(nn.Dropout(dropout))
         
         # Output layer
         layers.append(nn.Linear(hidden_nodes, output_size))
