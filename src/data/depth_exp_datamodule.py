@@ -54,7 +54,8 @@ class GraceDataModule(LightningDataModule):
 
     def __init__(
         self,
-        data_dir: str = "20240715_032420_095729",
+        data_dir: list = ["/home/jaynieles/dev/grace_dl/data/charuco_calibration/d0pt75/20240806_141713_921756_d075_lnt0_unt0",
+                          "/home/jaynieles/dev/grace_dl/data/charuco_calibration/d1pt00/20240806_152452_755967_d1_lnt0_unt0"],
         eye: str = "left",
         val_size = 0.2,
         batch_size: int = 64,
@@ -82,13 +83,13 @@ class GraceDataModule(LightningDataModule):
 
     def preprocess_csv(self, data_dir, eye):
         # Read CSV
-        files_path = os.path.join(os.getcwd(),'data', data_dir, f"*{eye}*.csv")
-        csv_files = glob.glob(files_path)
-        
         dfs = []
-        for csv_file in csv_files:
-            temp_df = pd.read_csv(csv_file)
-            dfs.append(temp_df)
+        for dir in data_dir:        
+            files_path = os.path.join(dir, f"*{eye}*.csv")
+            csv_files = glob.glob(files_path)
+            for csv_file in csv_files:
+                temp_df = pd.read_csv(csv_file)
+                dfs.append(temp_df)
         df = pd.concat(dfs, ignore_index=True)
 
         # Minmax Feature Scaler

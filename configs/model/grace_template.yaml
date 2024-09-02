@@ -3,17 +3,23 @@ _target_: src.models.grace_module.GraceLitModule
 optimizer:
   _target_: torch.optim.Adam
   _partial_: true
-  lr: 0.0001
+  lr: 0.001
   weight_decay: 0.0
+
+scheduler:
+  _target_: torch.optim.lr_scheduler.ReduceLROnPlateau
+  _partial_: true
+  mode: min
+  factor: 0.1
+  patience: 10
 
 net:
   _target_: src.models.components.simple_dense_net.SimpleDenseNet
   input_size: 6
+  lin1_size: 64
+  lin2_size: 64
+  lin3_size: 64
   output_size: 2
-  hidden_size: 3
-  hidden_nodes: 256
-  dropout: 0.5
-  
 
 # compile model for faster training with pytorch 2.0
 compile: false

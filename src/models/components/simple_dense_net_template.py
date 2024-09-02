@@ -8,10 +8,10 @@ class SimpleDenseNet(nn.Module):
     def __init__(
         self,
         input_size: int = 6,
+        lin1_size: int = 64,
+        lin2_size: int = 64,
+        lin3_size: int = 64,
         output_size: int = 2,
-        hidden_size: int = 3,
-        hidden_nodes: int = 256,
-        dropout = 0.5
     ) -> None:
         """Initialize a `SimpleDenseNet` module.
 
@@ -23,25 +23,18 @@ class SimpleDenseNet(nn.Module):
         """
         super().__init__()
 
-        # Create the layers
-        layers = []
-        
-        # Input layer
-        layers.append(nn.Linear(input_size, hidden_nodes))
-        layers.append(nn.ReLU())
-        layers.append(nn.Dropout(dropout))
-        
-        # Hidden layers
-        if hidden_size > 1:
-            for i in range(1, hidden_size):
-                layers.append(nn.Linear(hidden_nodes, hidden_nodes))
-                layers.append(nn.ReLU())
-                layers.append(nn.Dropout(dropout))
-        
-        # Output layer
-        layers.append(nn.Linear(hidden_nodes, output_size))
-        
-        self.model = nn.Sequential(*layers)
+        self.model = nn.Sequential(
+            nn.Linear(input_size, lin1_size),
+            nn.BatchNorm1d(lin1_size),
+            nn.ReLU(),
+            nn.Linear(lin1_size, lin2_size),
+            nn.BatchNorm1d(lin2_size),
+            nn.ReLU(),
+            nn.Linear(lin2_size, lin3_size),
+            nn.BatchNorm1d(lin3_size),
+            nn.ReLU(),
+            nn.Linear(lin3_size, output_size),
+        )
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         """Perform a single forward pass through the network.
