@@ -151,7 +151,7 @@
         <parent link="eyes"/>
         <child link="lefteye"/>
         <axis xyz="0 0 -1"/>
-        <origin xyz="0 0.02895 0" rpy="0 0 -0.0289"/>
+        <origin xyz="0 0.02895 0"/>  <!--rpy="0 0 -0.0289"-->
         <limit effort="1" lower="-1" upper="1" velocity="1"/>
     </joint>
 
@@ -159,7 +159,7 @@
         <parent link="eyes"/>
         <child link="righteye"/>
         <axis xyz="0 0 -1"/>
-        <origin xyz="0 -0.02895 0" rpy="0 0 0.0289"/>
+        <origin xyz="0 -0.02895 0"/>  <!--rpy="0 0 0.0289"-->
         <limit effort="1" lower="-1" upper="1" velocity="1"/>
     </joint>
 
