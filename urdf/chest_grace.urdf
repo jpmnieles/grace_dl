@@ -81,6 +81,10 @@
         </visual>
     </link>
 
+    <link name="leftcamera"/>
+
+    <link name="rightcamera"/>
+
     <!-- Joints -->
 
     <joint name="chest_camera" type="fixed">
@@ -92,9 +96,7 @@
     <joint name="torso" type="fixed">
         <parent link="realsense"/>
         <child link="torso"/>
-        <axis xyz="0 -1 0"/>
-        <origin xyz="-0.12234 -0.0325 0.05692"/>
-        <limit effort="1" lower="-1" upper="1" velocity="1"/>
+        <origin xyz="-0.12234 -0.0325 0.05692" rpy="0 0 0"/>
     </joint>
 
     <joint name="neck_pitch" type="revolute">
@@ -143,6 +145,18 @@
         <axis xyz="0 0 -1"/>
         <origin xyz="0 -0.02895 0"/>  <!--rpy="0 0 0.0289"-->
         <limit effort="1" lower="-1" upper="1" velocity="1"/>
+    </joint>
+
+    <joint name="lefteye_cam" type="fixed">
+        <parent link="lefteye"/>
+        <child link="leftcamera"/>
+        <origin xyz="0.015 0 0" rpy="0 0 0"/>
+    </joint>
+
+    <joint name="righteye_cam" type="fixed">
+        <parent link="righteye"/>
+        <child link="rightcamera"/>
+        <origin xyz="0.015 0 0" rpy="0 0 0"/>
     </joint>
 
 
