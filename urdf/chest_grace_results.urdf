@@ -3,7 +3,7 @@
   <link name="world"/>
   <link name="torso">
     <visual>
-      <origin xyz="0.01767 0.0 -0.267155" rpy="3.9906374643742737e-16 0 -1.4298558473741898e-16"/>
+      <origin xyz="0.01767 0.0 -0.267155" rpy="-1.3064604870132741e-16 0 -5.643848308639651e-17"/>
       <geometry>
         <box size="0.26 0.3 0.6"/>
       </geometry>
@@ -25,7 +25,7 @@
   </link>
   <link name="neck">
     <visual>
-      <origin xyz="0.0 0.0 0.07" rpy="3.9906374643742737e-16 0 -1.4298558473741898e-16"/>
+      <origin xyz="0.0 0.0 0.07" rpy="-1.3064604870132741e-16 0 -5.643848308639651e-17"/>
       <geometry>
         <cylinder radius="0.045" length="0.14"/>
       </geometry>
@@ -37,7 +37,7 @@
   <link name="neck_py"/>
   <link name="head">
     <visual>
-      <origin xyz="0.0 0.0 0.06" rpy="3.9906374643742737e-16 0 -1.4298558473741898e-16"/>
+      <origin xyz="0.0 0.0 0.06" rpy="-1.3064604870132741e-16 0 -5.643848308639651e-17"/>
       <geometry>
         <box size="0.21 0.115 0.2"/>
       </geometry>
@@ -49,7 +49,7 @@
   <link name="eyes"/>
   <link name="lefteye">
     <visual>
-      <origin xyz="0.0 0.0 0.0" rpy="3.9906374643742737e-16 0 -1.4298558473741898e-16"/>
+      <origin xyz="0.0 0.0 0.0" rpy="-1.3064604870132741e-16 0 -5.643848308639651e-17"/>
       <geometry>
         <sphere radius="0.005"/>
       </geometry>
@@ -60,7 +60,7 @@
   </link>
   <link name="righteye">
     <visual>
-      <origin xyz="0.0 0.0 0.0" rpy="3.9906374643742737e-16 0 -1.4298558473741898e-16"/>
+      <origin xyz="0.0 0.0 0.0" rpy="-1.3064604870132741e-16 0 -5.643848308639651e-17"/>
       <geometry>
         <sphere radius="0.005"/>
       </geometry>
@@ -77,59 +77,59 @@
     <child link="realsense"/>
   </joint>
   <joint name="torso" type="fixed">
-    <origin xyz="-0.12233999999999948 -0.03250000000000028 0.05691999999999999" rpy="0.0 0.0 0.0"/>
+    <origin xyz="-0.12234000000000009 -0.032499999999999925 0.056919999999999804" rpy="0.0 0.0 0.0"/>
     <parent link="realsense"/>
     <child link="torso"/>
   </joint>
   <joint name="neck_pitch" type="revolute">
-    <origin xyz="0.0 0.0 0.0" rpy="3.9906374643742737e-16 0 -1.4298558473741898e-16"/>
+    <origin xyz="0.0 0.0 0.0" rpy="-1.3064604870132741e-16 0 -5.643848308639651e-17"/>
     <axis xyz="0.0 -1.0 0.0"/>
     <parent link="torso"/>
     <child link="neck_py"/>
     <limit effort="1.0" lower="-1.0" upper="1.0" velocity="1.0"/>
   </joint>
   <joint name="neck_yaw" type="revolute">
-    <origin xyz="0.0 0.0 0.0" rpy="3.9906374643742737e-16 0 -1.4298558473741898e-16"/>
+    <origin xyz="0.0 0.0 0.0" rpy="-1.3064604870132741e-16 0 -5.643848308639651e-17"/>
     <axis xyz="0.0 0.0 -1.0"/>
     <parent link="neck_py"/>
     <child link="neck"/>
     <limit effort="1.0" lower="-1.0" upper="1.0" velocity="1.0"/>
   </joint>
   <joint name="head_pitch" type="revolute">
-    <origin xyz="0.0 0.0 0.13171999999999967" rpy="3.9906374643742737e-16 0 -1.4298558473741898e-16"/>
+    <origin xyz="0.0 0.0 0.1317200000000001" rpy="-1.3064604870132741e-16 0 -5.643848308639651e-17"/>
     <axis xyz="0.0 -1.0 0.0"/>
     <parent link="neck"/>
     <child link="head"/>
     <limit effort="1.0" lower="-1.0" upper="1.0" velocity="1.0"/>
   </joint>
   <joint name="eyes_pitch" type="revolute">
-    <origin xyz="0.0849199999999998 0.0 0.05185999999999989" rpy="3.9906374643742737e-16 0 -1.4298558473741898e-16"/>
+    <origin xyz="0.08492000000000018 0.0 0.05186000000000053" rpy="-1.3064604870132741e-16 0 -5.643848308639651e-17"/>
     <axis xyz="0.0 -1.0 0.0"/>
     <parent link="head"/>
     <child link="eyes"/>
     <limit effort="1.0" lower="-1.0" upper="1.0" velocity="1.0"/>
   </joint>
   <joint name="lefteye_yaw" type="revolute">
-    <origin xyz="0.0 0.02895000000000097 0.0" rpy="3.9906374643742737e-16 0 -1.4298558473741898e-16"/>
+    <origin xyz="0.0 0.028950000000000253 0.0" rpy="-1.3064604870132741e-16 0 -5.643848308639651e-17"/>
     <axis xyz="0.0 0.0 -1.0"/>
     <parent link="eyes"/>
     <child link="lefteye"/>
     <limit effort="1.0" lower="-1.0" upper="1.0" velocity="1.0"/>
   </joint>
   <joint name="righteye_yaw" type="revolute">
-    <origin xyz="0.0 -0.02895000000000043 0.0" rpy="3.9906374643742737e-16 0 -1.4298558473741898e-16"/>
+    <origin xyz="0.0 -0.028950000000000028 0.0" rpy="-1.3064604870132741e-16 0 -5.643848308639651e-17"/>
     <axis xyz="0.0 0.0 -1.0"/>
     <parent link="eyes"/>
     <child link="righteye"/>
     <limit effort="1.0" lower="-1.0" upper="1.0" velocity="1.0"/>
   </joint>
   <joint name="lefteye_cam" type="fixed">
-    <origin xyz="0.015000000000000228 0.0 0.0" rpy="-0.2725837618652101 -0.470179129111392 -0.22861403664100136"/>
+    <origin xyz="0.015000000000000064 0.0 0.0" rpy="-0.4757743175985389 -0.305183729980649 -0.539632142192319"/>
     <parent link="lefteye"/>
     <child link="leftcamera"/>
   </joint>
   <joint name="righteye_cam" type="fixed">
-    <origin xyz="0.014999999999999803 0.0 0.0" rpy="0.3793764370910186 -0.4250905711033968 0.05414172136937682"/>
+    <origin xyz="0.015000000000000251 0.0 0.0" rpy="0.44803016476492735 -0.2849255765358385 0.27326619540272046"/>
     <parent link="righteye"/>
     <child link="rightcamera"/>
   </joint>
