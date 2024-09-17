@@ -20,9 +20,9 @@
     <link name="realsense">
         <visual>
             <geometry>
-                <box size="0.025 0.09 0.025"/>
+                <box size="0.09 0.025 0.025"/>
             </geometry>
-            <origin xyz="-0.01485 -0.0325 0" rpy="0 0 0"/>
+            <origin xyz="0.0325 0 0.01485" rpy="0 0 0"/>
             <material name="robot_camera">
                 <color rgba="0.0 0.1 0.3 0.6"/>
             </material>
@@ -96,7 +96,7 @@
     <joint name="torso" type="fixed">
         <parent link="realsense"/>
         <child link="torso"/>
-        <origin xyz="-0.0325 -0.05692 -0.12234" rpy="1.5708 -1.5708 0"/> <!--"-0.12234 -0.0325 0.05692" rpy="1.5708 -1.5708 0"-->
+        <origin xyz="0.0325 -0.05692 -0.12234" rpy="1.5708 -1.5708 0"/> <!--"-0.12234 -0.0325 0.05692" rpy="1.5708 -1.5708 0"-->
     </joint>
 
     <joint name="neck_pitch" type="revolute">
