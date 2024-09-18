@@ -300,8 +300,10 @@ def main(i):
 
 if __name__ == '__main__':
     start = time.time()
-    for i in range(5):
+    loss_list = []
+    for i in range(1000):
         loss = main(i)
-        print(loss)
+        loss_list.append(loss)
     end = time.time()
-    print(end-start)
+    print(loss_list)
+    print('Elapsed Time (sec):',end-start)

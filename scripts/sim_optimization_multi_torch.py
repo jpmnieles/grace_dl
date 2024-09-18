@@ -266,16 +266,15 @@ def objective_function(V, x_c_l, y_c_l, z_c_l, x_c_r, y_c_r, z_c_r,
     
     # Loss
     residuals = torch.cat((((u_left-true_u_left)**2).reshape(-1,1),((v_left-true_v_left)**2).reshape(-1,1),((u_right-true_u_right)**2).reshape(-1,1),((v_right-true_v_right)**2).reshape(-1,1)), dim=1).cpu().numpy()
-    print(residuals)
     res_sum = np.sum(residuals, axis=1)
 
     # Return Loss
     return res_sum
 
 
-def main():
+def main(i):
     # Sample 1
-    small_df = temp_df.iloc[:5]
+    small_df = temp_df.iloc[:i]
 
     # Convert DF Degrees Column to Radians
     data_df = small_df.copy()
@@ -309,5 +308,8 @@ def main():
 
 
 if __name__ == '__main__':
-    loss = main()
+    start = time.time()
+    loss = main(1000)
     print(loss)
+    end = time.time()
+    print('Elapsed Time (sec):',end-start)
