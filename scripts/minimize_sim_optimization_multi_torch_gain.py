@@ -59,20 +59,20 @@ right_dist_coef = torch.Tensor(cam_mtxs['right_eye']['distortion_coefficients'])
 # Decision Variables Initial Value
 
 var_dict= {
-    # 'neck_pitch_polyfit_b1': 0.5,
-    # 'neck_yaw_polyfit_b1': 0.5,
-    # 'head_pitch_polyfit_b1': 0.5,
-    # 'eyes_pitch_polyfit_b1': 0.4,
-    # 'lefteye_yaw_polyfit_b1': 1.6,
-    # 'righteye_yaw_polyfit_b1': 1.7,
+    'neck_pitch_polyfit_b1': 0.1,
+    'neck_yaw_polyfit_b1': 0.1,
+    'head_pitch_polyfit_b1': 0.1,
+    'eyes_pitch_polyfit_b1': 0.1,
+    'lefteye_yaw_polyfit_b1': 0.1,
+    'righteye_yaw_polyfit_b1': 0.1,
 
-    'lefteye_cam_rot_r': -0.1,
-    'lefteye_cam_rot_p': -0.1,
-    'lefteye_cam_rot_y': -0.1,
+    # 'lefteye_cam_rot_r': -0.1,
+    # 'lefteye_cam_rot_p': -0.1,
+    # 'lefteye_cam_rot_y': -0.1,
 
-    'righteye_cam_rot_r':-0.1,
-    'righteye_cam_rot_p':-0.1,
-    'righteye_cam_rot_y':-0.1,
+    # 'righteye_cam_rot_r':-0.1,
+    # 'righteye_cam_rot_p':-0.1,
+    # 'righteye_cam_rot_y':-0.1,
 
 }
 
@@ -161,23 +161,23 @@ def objective_function(V, x_c_l, y_c_l, z_c_l, x_c_r, y_c_r, z_c_r,
     cmd_rep = torch.Tensor(cmd_rep).reshape(-1,1).to(dtype=dtype, device=device)
 
     #Joint-to-Motor Polynomial Models
-    # neck_pitch = cmd_lnt @ torch.Tensor([V[var2idx['neck_pitch_polyfit_b1']]]).to(dtype=dtype, device=device)
-    # neck_yaw = cmd_lnp @ torch.Tensor([V[var2idx['neck_yaw_polyfit_b1']]]).to(dtype=dtype, device=device)
-    # head_pitch = cmd_unt @ torch.Tensor([V[var2idx['head_pitch_polyfit_b1']]]).to(dtype=dtype, device=device)
-    # eyes_pitch = cmd_et @ torch.Tensor([V[var2idx['eyes_pitch_polyfit_b1']]]).to(dtype=dtype, device=device)
-    # lefteye_yaw = cmd_lep @ torch.Tensor([V[var2idx['lefteye_yaw_polyfit_b1']]]).to(dtype=dtype, device=device)
-    # righteye_yaw = cmd_rep @ torch.Tensor([V[var2idx['righteye_yaw_polyfit_b1']]]).to(dtype=dtype, device=device)
+    neck_pitch = cmd_lnt @ torch.Tensor([V[var2idx['neck_pitch_polyfit_b1']]]).to(dtype=dtype, device=device)
+    neck_yaw = cmd_lnp @ torch.Tensor([V[var2idx['neck_yaw_polyfit_b1']]]).to(dtype=dtype, device=device)
+    head_pitch = cmd_unt @ torch.Tensor([V[var2idx['head_pitch_polyfit_b1']]]).to(dtype=dtype, device=device)
+    eyes_pitch = cmd_et @ torch.Tensor([V[var2idx['eyes_pitch_polyfit_b1']]]).to(dtype=dtype, device=device)
+    lefteye_yaw = cmd_lep @ torch.Tensor([V[var2idx['lefteye_yaw_polyfit_b1']]]).to(dtype=dtype, device=device)
+    righteye_yaw = cmd_rep @ torch.Tensor([V[var2idx['righteye_yaw_polyfit_b1']]]).to(dtype=dtype, device=device)
 
-    neck_pitch = cmd_lnt @ torch.Tensor([0.5]).to(dtype=dtype, device=device)
-    neck_yaw = cmd_lnp @ torch.Tensor([0.5]).to(dtype=dtype, device=device)
-    head_pitch = cmd_unt @ torch.Tensor([0.5]).to(dtype=dtype, device=device)
-    eyes_pitch = cmd_et @ torch.Tensor([0.4]).to(dtype=dtype, device=device)
-    lefteye_yaw = cmd_lep @ torch.Tensor([1.6]).to(dtype=dtype, device=device)
-    righteye_yaw = cmd_rep @ torch.Tensor([1.7]).to(dtype=dtype, device=device)
+    # neck_pitch = cmd_lnt @ torch.Tensor([0.5]).to(dtype=dtype, device=device)
+    # neck_yaw = cmd_lnp @ torch.Tensor([0.5]).to(dtype=dtype, device=device)
+    # head_pitch = cmd_unt @ torch.Tensor([0.5]).to(dtype=dtype, device=device)
+    # eyes_pitch = cmd_et @ torch.Tensor([0.4]).to(dtype=dtype, device=device)
+    # lefteye_yaw = cmd_lep @ torch.Tensor([1.6]).to(dtype=dtype, device=device)
+    # righteye_yaw = cmd_rep @ torch.Tensor([1.7]).to(dtype=dtype, device=device)
 
 
     # URDF Variable Assignment
-    for joint in robot.joints:
+    # for joint in robot.joints:
         # if joint.name == 'torso':
         #     joint.origin.position[0] = V[24]
         #     joint.origin.position[1] = V[25]
@@ -199,29 +199,29 @@ def objective_function(V, x_c_l, y_c_l, z_c_l, x_c_r, y_c_r, z_c_r,
         #     # oint.origin.position[1] = V[35]
         # elif joint.name == 'righteye_yaw':
         #     # joint.origin.position[1] = V[36]
-        if joint.name == 'lefteye_cam':
-            # joint.origin.position[0] = V[37]
-            joint.origin.rotation[0] = V[var2idx['lefteye_cam_rot_r']]
-            joint.origin.rotation[1] = V[var2idx['lefteye_cam_rot_p']]
-            joint.origin.rotation[2] = V[var2idx['lefteye_cam_rot_y']]
-        elif joint.name == 'righteye_cam':
-            # joint.origin.position[0] = V[41]
-            joint.origin.rotation[0] = V[var2idx['righteye_cam_rot_r']]
-            joint.origin.rotation[1] = V[var2idx['righteye_cam_rot_p']]
-            joint.origin.rotation[2] = V[var2idx['righteye_cam_rot_y']]
+        # if joint.name == 'lefteye_cam':
+        #     # joint.origin.position[0] = V[37]
+        #     joint.origin.rotation[0] = V[var2idx['lefteye_cam_rot_r']]
+        #     joint.origin.rotation[1] = V[var2idx['lefteye_cam_rot_p']]
+        #     joint.origin.rotation[2] = V[var2idx['lefteye_cam_rot_y']]
+        # elif joint.name == 'righteye_cam':
+        #     # joint.origin.position[0] = V[41]
+        #     joint.origin.rotation[0] = V[var2idx['righteye_cam_rot_r']]
+        #     joint.origin.rotation[1] = V[var2idx['righteye_cam_rot_p']]
+        #     joint.origin.rotation[2] = V[var2idx['righteye_cam_rot_y']]
 
-    # # URDF Variable Assignment
-    # for joint in robot.joints:
-    #     if joint.name == 'lefteye_cam':
-    #         joint.origin.position[0] = 0.015 + 0
-    #         joint.origin.rotation[0] = -1.5708 + 0.03457662014401592  # For Y, Downwards is + because of Camera Opencv Coordinate System
-    #         joint.origin.rotation[1] = 0 + 0
-    #         joint.origin.rotation[2] = -1.5708 + 0.18913797017088096  # Orientation Offset: Right Hand Rule (Positive CCW)
-    #     elif joint.name == 'righteye_cam':
-    #         joint.origin.position[0] = 0.015 + 0
-    #         joint.origin.rotation[0] = -1.5708 + 0.05553511593216458  # For Y, Downwards is + because of Camera Opencv Coordinate System
-    #         joint.origin.rotation[1] = 0 + 0
-    #         joint.origin.rotation[2] = -1.5708 + -0.2544206094843146  # Orientation Offset: Right Hand Rule (Positive CCW)
+    # URDF Variable Assignment
+    for joint in robot.joints:
+        if joint.name == 'lefteye_cam':
+            joint.origin.position[0] = 0.015 + 0
+            joint.origin.rotation[0] = -1.5708 + 0.03457662014401592  # For Y, Downwards is + because of Camera Opencv Coordinate System
+            joint.origin.rotation[1] = 0 + 0
+            joint.origin.rotation[2] = -1.5708 + 0.18913797017088096  # Orientation Offset: Right Hand Rule (Positive CCW)
+        elif joint.name == 'righteye_cam':
+            joint.origin.position[0] = 0.015 + 0
+            joint.origin.rotation[0] = -1.5708 + 0.05553511593216458  # For Y, Downwards is + because of Camera Opencv Coordinate System
+            joint.origin.rotation[1] = 0 + 0
+            joint.origin.rotation[2] = -1.5708 + -0.2544206094843146  # Orientation Offset: Right Hand Rule (Positive CCW)
     
     # XML to String
     urdf_str = xml_to_str(robot)

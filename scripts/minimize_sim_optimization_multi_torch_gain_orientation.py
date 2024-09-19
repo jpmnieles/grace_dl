@@ -59,19 +59,19 @@ right_dist_coef = torch.Tensor(cam_mtxs['right_eye']['distortion_coefficients'])
 # Decision Variables Initial Value
 
 var_dict= {
-    'neck_pitch_polyfit_b1': 0.5,
-    'neck_yaw_polyfit_b1': 0.5,
-    'head_pitch_polyfit_b1': 0.5,
-    'eyes_pitch_polyfit_b1': 0.4,
-    'lefteye_yaw_polyfit_b1': 1.6,
-    'righteye_yaw_polyfit_b1': 1.7,
+    'neck_pitch_polyfit_b1': 0.1,
+    'neck_yaw_polyfit_b1': 0.1,
+    'head_pitch_polyfit_b1': 0.1,
+    'eyes_pitch_polyfit_b1': 0.1,
+    'lefteye_yaw_polyfit_b1': 0.1,
+    'righteye_yaw_polyfit_b1': 0.1,
 
     'lefteye_cam_rot_r': -0.1,
-    'lefteye_cam_rot_p': -0.1,
+    # 'lefteye_cam_rot_p': -0.1,
     'lefteye_cam_rot_y': -0.1,
 
     'righteye_cam_rot_r':-0.1,
-    'righteye_cam_rot_p':-0.1,
+    # 'righteye_cam_rot_p':-0.1,
     'righteye_cam_rot_y':-0.1,
 
 }
@@ -202,12 +202,12 @@ def objective_function(V, x_c_l, y_c_l, z_c_l, x_c_r, y_c_r, z_c_r,
         if joint.name == 'lefteye_cam':
             # joint.origin.position[0] = V[37]
             joint.origin.rotation[0] = V[var2idx['lefteye_cam_rot_r']]
-            joint.origin.rotation[1] = V[var2idx['lefteye_cam_rot_p']]
+            # joint.origin.rotation[1] = V[var2idx['lefteye_cam_rot_p']]
             joint.origin.rotation[2] = V[var2idx['lefteye_cam_rot_y']]
         elif joint.name == 'righteye_cam':
             # joint.origin.position[0] = V[41]
             joint.origin.rotation[0] = V[var2idx['righteye_cam_rot_r']]
-            joint.origin.rotation[1] = V[var2idx['righteye_cam_rot_p']]
+            # joint.origin.rotation[1] = V[var2idx['righteye_cam_rot_p']]
             joint.origin.rotation[2] = V[var2idx['righteye_cam_rot_y']]
 
     # # URDF Variable Assignment
@@ -320,7 +320,10 @@ def main():
     # opt = least_squares(objective_function, V, verbose=2, max_nfev=100, args=(x_c_l, y_c_l, z_c_l, x_c_r, y_c_r, z_c_r,
     #                                              cmd_lnt, cmd_lnp, cmd_unt, cmd_et, cmd_lep, cmd_rep))
     opt = minimize(objective_function, V, args=(x_c_l, y_c_l, z_c_l, x_c_r, y_c_r, z_c_r,
-                                                 cmd_lnt, cmd_lnp, cmd_unt, cmd_et, cmd_lep, cmd_rep), method="Powell", options={"disp":True})
+                                                 cmd_lnt, cmd_lnp, cmd_unt, cmd_et, cmd_lep, cmd_rep), 
+                                                 method="Powell", options={"disp":True},
+                                                 bounds=((0,3),(0,3),(0,3),(0,3),(0,3),(0,3),
+                                                         (-3.1416,0),(-3.1416,0),(-3.1416,0),(-3.1416,0)))
     
     
     print(dict(zip(var_names_list, opt.x)))
