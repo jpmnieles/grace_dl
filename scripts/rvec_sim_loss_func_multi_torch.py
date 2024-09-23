@@ -283,16 +283,16 @@ def objective_function(V, x_c_l, y_c_l, z_c_l, x_c_r, y_c_r, z_c_r,
     out_r_tvec = T_crprime[:,:3,3]
 
     # Loss
-    # residuals = (mse_loss(out_l_rvec, l_rvec_t, reduction='sum') + mse_loss(out_l_tvec, l_tvec_t, reduction='sum')
-    #              + mse_loss(out_r_rvec, r_rvec_t, reduction='sum') + mse_loss(out_r_tvec, r_tvec_t, reduction='sum'))
-    res_list = []
-    for i in range(10):
-        res = torch.sum((out_l_rvec[i]-l_rvec_t[i])**2 + (out_l_tvec[i]-l_tvec_t[i])**2 
-                       + (out_r_rvec[i]-r_rvec_t[i])**2 + (out_r_tvec[i]-r_tvec_t[i])**2).cpu().item()
-        res_list.append(res)
-    print(res_list)
+    residuals = (mse_loss(out_l_rvec, l_rvec_t, reduction='sum') + mse_loss(out_l_tvec, l_tvec_t, reduction='sum')
+                 + mse_loss(out_r_rvec, r_rvec_t, reduction='sum') + mse_loss(out_r_tvec, r_tvec_t, reduction='sum'))
+    # res_list = []
+    # for i in range(10):
+    #     res = torch.sum((out_l_rvec[i]-l_rvec_t[i])**2 + (out_l_tvec[i]-l_tvec_t[i])**2 
+    #                    + (out_r_rvec[i]-r_rvec_t[i])**2 + (out_r_tvec[i]-r_tvec_t[i])**2).cpu().item()
+    #     res_list.append(res)
+    # print(res_list)
     
-    residuals = np.sum(res_list)
+    # residuals = np.sum(res_list)
     
     # Return Loss
     return residuals
