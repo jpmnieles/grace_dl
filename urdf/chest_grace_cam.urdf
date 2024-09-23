@@ -22,7 +22,7 @@
             <geometry>
                 <box size="0.09 0.025 0.025"/>
             </geometry>
-            <origin xyz="0.0325 0 0.01485" rpy="0 0 0"/>
+            <origin xyz="0.0325 0 -0.01485" rpy="0 0 0"/>
             <material name="robot_camera">
                 <color rgba="0.0 0.1 0.3 0.6"/>
             </material>
