@@ -396,6 +396,48 @@ def main():
     
     print(dict(zip(var_names_list, opt.x)))
 
+    # Saving URDF Results
+    V = opt.x
+
+    for joint in robot.joints:
+        if joint.name == 'torso':
+            joint.origin.position[0] = V[var2idx['torso_origin_x']]
+            joint.origin.position[1] = V[var2idx['torso_origin_y']]
+            joint.origin.position[2] = V[var2idx['torso_origin_z']]
+        elif joint.name == 'neck_pitch':
+            joint.origin.rotation[0] = V[var2idx['neck_pitch_rot_r']]
+        elif joint.name == 'head_pitch':
+            joint.origin.position[2] = V[var2idx['head_pitch_origin_z']]
+            # joint.origin.rotation[0] = V[29]
+            # joint.origin.rotation[2] = V[30]
+        elif joint.name == 'eyes_pitch':
+            joint.origin.position[0] = V[var2idx['eyes_pitch_origin_x']]
+            joint.origin.position[2] = V[var2idx['eyes_pitch_origin_z']]
+            # joint.origin.rotation[0] = V[33]
+            # joint.origin.rotation[2] = V[34]
+        # elif joint.name == 'lefteye_yaw':
+        #     joint.origin.position[1] = V[var2idx['lefteye_yaw_origin_y']]
+        # elif joint.name == 'righteye_yaw':
+        #     joint.origin.position[1] = V[var2idx['righteye_yaw_origin_y']]
+        elif joint.name == 'lefteye_cam':
+            joint.origin.position[0] = V[var2idx['lefteye_cam_origin_x']]
+            joint.origin.rotation[0] = V[var2idx['lefteye_cam_rot_r']]
+            # joint.origin.rotation[1] = V[var2idx['lefteye_cam_rot_p']]
+            joint.origin.rotation[2] = V[var2idx['lefteye_cam_rot_y']]
+        elif joint.name == 'righteye_cam':
+            joint.origin.position[0] = V[var2idx['righteye_cam_origin_x']]
+            joint.origin.rotation[0] = V[var2idx['righteye_cam_rot_r']]
+            # joint.origin.rotation[1] = V[var2idx['righteye_cam_rot_p']]
+            joint.origin.rotation[2] = V[var2idx['righteye_cam_rot_y']]
+
+    # Write the XML string to a .urdf file
+    urdf_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..','urdf', '075m_grace_results.urdf')
+    results_str = robot.to_xml_string()
+    with open(urdf_path, 'w') as file:
+        file.write(results_str)
+    print(f"XML string saved to {urdf_path}")
+
+
 
 if __name__ == '__main__':
     start = time.time()
