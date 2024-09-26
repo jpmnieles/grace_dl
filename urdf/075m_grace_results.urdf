@@ -1,0 +1,136 @@
+<?xml version="1.0" ?>
+<robot name="robot" version="1.0">
+  <link name="world"/>
+  <link name="torso">
+    <visual>
+      <origin xyz="0.01767 0.0 -0.267155" rpy="-0.008192992742714495 0 0"/>
+      <geometry>
+        <box size="0.26 0.3 0.6"/>
+      </geometry>
+      <material name="robot_model">
+        <color rgba="0.3 0.3 0.3 0.4"/>
+      </material>
+    </visual>
+  </link>
+  <link name="realsense">
+    <visual>
+      <origin xyz="0.0325 0.0 -0.01485" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <box size="0.09 0.025 0.025"/>
+      </geometry>
+      <material name="robot_camera">
+        <color rgba="0.0 0.1 0.3 0.6"/>
+      </material>
+    </visual>
+  </link>
+  <link name="neck">
+    <visual>
+      <origin xyz="0.0 0.0 0.07" rpy="-0.008192992742714495 0 0"/>
+      <geometry>
+        <cylinder radius="0.045" length="0.14"/>
+      </geometry>
+      <material name="robot_model">
+        <color rgba="0.3 0.3 0.3 0.4"/>
+      </material>
+    </visual>
+  </link>
+  <link name="neck_py"/>
+  <link name="head">
+    <visual>
+      <origin xyz="0.0 0.0 0.06" rpy="-0.008192992742714495 0 0"/>
+      <geometry>
+        <box size="0.21 0.115 0.2"/>
+      </geometry>
+      <material name="robot_model">
+        <color rgba="0.3 0.3 0.3 0.4"/>
+      </material>
+    </visual>
+  </link>
+  <link name="eyes"/>
+  <link name="lefteye">
+    <visual>
+      <origin xyz="0.0 0.0 0.0" rpy="-0.008192992742714495 0 0"/>
+      <geometry>
+        <sphere radius="0.005"/>
+      </geometry>
+      <material name="robot_camera">
+        <color rgba="0.0 0.1 0.3 0.6"/>
+      </material>
+    </visual>
+  </link>
+  <link name="righteye">
+    <visual>
+      <origin xyz="0.0 0.0 0.0" rpy="-0.008192992742714495 0 0"/>
+      <geometry>
+        <sphere radius="0.005"/>
+      </geometry>
+      <material name="robot_camera">
+        <color rgba="0.0 0.1 0.3 0.6"/>
+      </material>
+    </visual>
+  </link>
+  <link name="leftcamera"/>
+  <link name="rightcamera"/>
+  <joint name="chest_camera" type="fixed">
+    <origin xyz="0.0 0.0 0.44739" rpy="-1.5708 0.0 -1.5708"/>
+    <parent link="world"/>
+    <child link="realsense"/>
+  </joint>
+  <joint name="torso" type="fixed">
+    <origin xyz="0.03728854190633217 -0.04250487558461791 -0.11998917752401943" rpy="1.5708 -1.5708 0.0"/>
+    <parent link="realsense"/>
+    <child link="torso"/>
+  </joint>
+  <joint name="neck_pitch" type="revolute">
+    <origin xyz="0.0 0.0 0.0" rpy="-0.008192992742714495 0 0"/>
+    <axis xyz="0.0 -1.0 0.0"/>
+    <parent link="torso"/>
+    <child link="neck_py"/>
+    <limit effort="1.0" lower="-1.0" upper="1.0" velocity="1.0"/>
+  </joint>
+  <joint name="neck_yaw" type="revolute">
+    <origin xyz="0.0 0.0 0.0" rpy="-0.008192992742714495 0 0"/>
+    <axis xyz="0.0 0.0 -1.0"/>
+    <parent link="neck_py"/>
+    <child link="neck"/>
+    <limit effort="1.0" lower="-1.0" upper="1.0" velocity="1.0"/>
+  </joint>
+  <joint name="head_pitch" type="revolute">
+    <origin xyz="0.0 0.0 0.13171983680245028" rpy="-0.008192992742714495 0 0"/>
+    <axis xyz="0.0 -1.0 0.0"/>
+    <parent link="neck"/>
+    <child link="head"/>
+    <limit effort="1.0" lower="-1.0" upper="1.0" velocity="1.0"/>
+  </joint>
+  <joint name="eyes_pitch" type="revolute">
+    <origin xyz="0.08484480801032619 0.0 0.05405631662401559" rpy="-0.008192992742714495 0 0"/>
+    <axis xyz="0.0 -1.0 0.0"/>
+    <parent link="head"/>
+    <child link="eyes"/>
+    <limit effort="1.0" lower="-1.0" upper="1.0" velocity="1.0"/>
+  </joint>
+  <joint name="lefteye_yaw" type="revolute">
+    <origin xyz="0.0 0.02895 0.0" rpy="-0.008192992742714495 0 0"/>
+    <axis xyz="0.0 0.0 -1.0"/>
+    <parent link="eyes"/>
+    <child link="lefteye"/>
+    <limit effort="1.0" lower="-1.0" upper="1.0" velocity="1.0"/>
+  </joint>
+  <joint name="righteye_yaw" type="revolute">
+    <origin xyz="0.0 -0.02895 0.0" rpy="-0.008192992742714495 0 0"/>
+    <axis xyz="0.0 0.0 -1.0"/>
+    <parent link="eyes"/>
+    <child link="righteye"/>
+    <limit effort="1.0" lower="-1.0" upper="1.0" velocity="1.0"/>
+  </joint>
+  <joint name="lefteye_cam" type="fixed">
+    <origin xyz="0.012931097762536712 0.0 0.0" rpy="-1.5377163004668393 0.0 -1.3907200533200954"/>
+    <parent link="lefteye"/>
+    <child link="leftcamera"/>
+  </joint>
+  <joint name="righteye_cam" type="fixed">
+    <origin xyz="0.013191035791495052 0.0 0.0" rpy="-1.512750700814442 0.0 -1.8321250470921735"/>
+    <parent link="righteye"/>
+    <child link="rightcamera"/>
+  </joint>
+</robot>
