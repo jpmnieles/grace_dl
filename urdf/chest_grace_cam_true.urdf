@@ -102,8 +102,8 @@
     <joint name="neck_pitch" type="revolute">
         <parent link="torso"/>
         <child link="neck_py"/>
-        <axis xyz="0 -1 0"/>
-        <origin xyz="0 0 0"/>
+        <axis xyz="0 1 0"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
         <limit effort="1" lower="-1" upper="1" velocity="1"/>
     </joint>
 
@@ -111,7 +111,7 @@
         <parent link="neck_py"/>
         <child link="neck"/>
         <axis xyz="0 0 -1"/>
-        <origin xyz="0 0 0"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
         <limit effort="1" lower="-1" upper="1" velocity="1"/>
     </joint>
 
@@ -119,7 +119,7 @@
         <parent link="neck"/>
         <child link="head"/>
         <axis xyz="0 -1 0"/>
-        <origin xyz="0 0 0.13172"/>
+        <origin xyz="0 0 0.13172" rpy="0 0 0"/>
         <limit effort="1" lower="-1" upper="1" velocity="1"/>
     </joint>
 
@@ -127,7 +127,7 @@
         <parent link="head"/>
         <child link="eyes"/>
         <axis xyz="0 -1 0"/>
-        <origin xyz="0.08492 0 0.05186"/>
+        <origin xyz="0.08492 0 0.05186" rpy="0 0 0"/>
         <limit effort="1" lower="-1" upper="1" velocity="1"/>
     </joint>
 
@@ -135,7 +135,7 @@
         <parent link="eyes"/>
         <child link="lefteye"/>
         <axis xyz="0 0 -1"/>
-        <origin xyz="0 0.02895 0"/>  <!--rpy="0 0 -0.0289"-->
+        <origin xyz="0 0.02895 0" rpy="0 0 0"/> 
         <limit effort="1" lower="-1" upper="1" velocity="1"/>
     </joint>
 
@@ -143,7 +143,7 @@
         <parent link="eyes"/>
         <child link="righteye"/>
         <axis xyz="0 0 -1"/>
-        <origin xyz="0 -0.02895 0"/>  <!--rpy="0 0 0.0289"-->
+        <origin xyz="0 -0.02895 0" rpy="0 0 0"/> 
         <limit effort="1" lower="-1" upper="1" velocity="1"/>
     </joint>
 
