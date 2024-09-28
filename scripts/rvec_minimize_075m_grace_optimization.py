@@ -6,6 +6,7 @@ import time
 import math
 import json
 import glob
+from datetime import datetime
 
 import numpy as np
 import pandas as pd
@@ -82,7 +83,7 @@ var_dict= {
     
     'eyes_pitch_origin_x': 0.08492,
     'eyes_pitch_origin_z': 0.05186,
-    # 'lefteye_yaw_origin_y': 0.02895,
+    'lefteye_yaw_origin_y': 0.02895,
     # 'righteye_yaw_origin_y': -0.02895,
     'lefteye_cam_origin_x': 0.015,
     'righteye_cam_origin_x': 0.015,
@@ -225,10 +226,10 @@ def objective_function(V, x_c_l, y_c_l, z_c_l, x_c_r, y_c_r, z_c_r,
             joint.origin.position[2] = V[var2idx['eyes_pitch_origin_z']]
             # joint.origin.rotation[0] = V[33]
             # joint.origin.rotation[2] = V[34]
-        # elif joint.name == 'lefteye_yaw':
-        #     joint.origin.position[1] = V[var2idx['lefteye_yaw_origin_y']]
-        # elif joint.name == 'righteye_yaw':
-        #     joint.origin.position[1] = V[var2idx['righteye_yaw_origin_y']]
+        elif joint.name == 'lefteye_yaw':
+            joint.origin.position[1] = V[var2idx['lefteye_yaw_origin_y']]
+        elif joint.name == 'righteye_yaw':
+            joint.origin.position[1] = -V[var2idx['lefteye_yaw_origin_y']]
         elif joint.name == 'lefteye_cam':
             joint.origin.position[0] = V[var2idx['lefteye_cam_origin_x']]
             joint.origin.rotation[0] = V[var2idx['lefteye_cam_rot_r']]
@@ -388,8 +389,9 @@ def main():
                                                          (-1,1),
                                                          (0,1),(-1,0),(-1,0),(0,1),
                                                          (0,1),(0,1),
-                                                        #  (0,0.05),(-0.05,0),
-                                                         (0,0.02),(0,0.02),
+                                                         (0,0.05),
+                                                         # (-0.05,0),
+                                                         (0,0.05),(0,0.05),
                                                          (-3.1416,0),(-3.1416,0),(-3.1416,0),(-3.1416,0),)
                                                 )
     
@@ -415,10 +417,10 @@ def main():
             joint.origin.position[2] = V[var2idx['eyes_pitch_origin_z']]
             # joint.origin.rotation[0] = V[33]
             # joint.origin.rotation[2] = V[34]
-        # elif joint.name == 'lefteye_yaw':
-        #     joint.origin.position[1] = V[var2idx['lefteye_yaw_origin_y']]
-        # elif joint.name == 'righteye_yaw':
-        #     joint.origin.position[1] = V[var2idx['righteye_yaw_origin_y']]
+        elif joint.name == 'lefteye_yaw':
+            joint.origin.position[1] = V[var2idx['lefteye_yaw_origin_y']]
+        elif joint.name == 'righteye_yaw':
+            joint.origin.position[1] = -V[var2idx['lefteye_yaw_origin_y']]
         elif joint.name == 'lefteye_cam':
             joint.origin.position[0] = V[var2idx['lefteye_cam_origin_x']]
             joint.origin.rotation[0] = V[var2idx['lefteye_cam_rot_r']]
@@ -437,24 +439,21 @@ def main():
         file.write(results_str)
     print(f"XML string saved to {urdf_path}")
 
+    # Print and save the results to csv
+    res_df = pd.DataFrame({
+        'initial': var_list,
+        'learned': V,
+    })
+    res_df.index = var_names_list
+    print(res_df)
+    res_fn = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
+    res_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..','results', res_fn+'_075m_grace_results.csv')
+    res_df.to_csv(res_path)
+    print(f"CSV results saved to {res_path}")
 
 
 if __name__ == '__main__':
     start = time.time()
     main()
     end = time.time()
-    print("lefteye_cam r:", -1.5708 + 0.03457662014401592)
-    print("lefteye_cam p:", 0)
-    print("lefteye_cam y:", -1.5708 + 0.18913797017088096)
-    print("righteye_cam r:", -1.5708 + 0.05553511593216458)
-    print("righteye_cam p:", 0)
-    print("righteye_cam y:", -1.5708 + -0.2544206094843146)
-    print("torso_origin_x:", 0.0325)
-    print("torso_origin_y:", -0.05692)
-    print("torso_origin_z:", -0.12234)
-    print('head_pitch_origin_z:', 0.13172)
-    print("eyes_pitch_origin_x:", 0.08492)
-    print("eyes_pitch_origin_z:", 0.05186)
-    print('lefteye_yaw_origin_y:',0.02895)
-    print('righteye_yaw_origin_y:', -0.02895)
     print('Elapsed Time (sec):',end-start)
