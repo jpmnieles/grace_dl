@@ -48,7 +48,7 @@ robot = URDF.from_xml_file(urdf_path)
 
 # Load Dataset CSV
 data_dir = "final"
-csv_file = os.path.join(os.path.dirname(os.path.abspath(__file__)),"..","data", data_dir, "241001_075m_grace_dataset.csv")
+csv_file = os.path.join(os.path.dirname(os.path.abspath(__file__)),"..","data", data_dir, "241003_075m_grace_dataset.csv")
 temp_df = pd.read_csv(csv_file)
 
 # Camera Parameters
