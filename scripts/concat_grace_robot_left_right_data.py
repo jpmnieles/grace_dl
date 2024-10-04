@@ -16,10 +16,10 @@ def preprocess_csv(data_dir, depth, eye):
         dfs.append(temp_df)
     df = pd.concat(dfs, ignore_index=True)
 
-    data_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..','data','structured',f"075m_{eye}_concat.csv")
+    data_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..','data','structured',f"{depth}m_{eye}_concat.csv")
     df.to_csv(data_path , index=False)
     print('Saved to:',data_path)
 
 if __name__ == '__main__':
-    preprocess_csv('raw','d075','left')
-    preprocess_csv('raw','d075','right')
+    preprocess_csv('raw','d1','left')
+    preprocess_csv('raw','d1','right')
