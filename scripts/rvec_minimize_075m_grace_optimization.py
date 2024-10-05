@@ -46,11 +46,6 @@ gaze_ctrs = load_json('calib_params.json')
 urdf_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),"..","urdf","chest_grace_cam_true.urdf")
 robot = URDF.from_xml_file(urdf_path)
 
-# Load Dataset CSV
-data_dir = "final"
-csv_file = os.path.join(os.path.dirname(os.path.abspath(__file__)),"..","data", data_dir, "241003_075m_grace_dataset.csv")
-temp_df = pd.read_csv(csv_file)
-
 # Camera Parameters
 left_cam_mtx = torch.Tensor(cam_mtxs['left_eye']['camera_matrix'])
 left_dist_coef = torch.Tensor(cam_mtxs['left_eye']['distortion_coefficients']).squeeze()
@@ -329,8 +324,10 @@ def objective_function(V, x_c_l, y_c_l, z_c_l, x_c_r, y_c_r, z_c_r,
     return residuals
 
 
-def main():
-    # Sample 1
+def main(data_dir="final", csv_fn="241003_075m_grace_dataset.csv"):
+    # Load Dataset CSV
+    csv_file = os.path.join(os.path.dirname(os.path.abspath(__file__)),"..","data", data_dir, csv_fn)
+    temp_df = pd.read_csv(csv_file)
     # small_df = temp_df.sample(n=10000, random_state=1).reset_index(drop=True)
     small_df = temp_df.copy()
     # small_df = temp_df[(temp_df['cmd_theta_lower_neck_pan']==0)
@@ -454,6 +451,6 @@ def main():
 
 if __name__ == '__main__':
     start = time.time()
-    main()
+    main("final","241003_075m_grace_dataset.csv")
     end = time.time()
     print('Elapsed Time (sec):',end-start)
