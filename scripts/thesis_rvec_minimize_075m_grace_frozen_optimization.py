@@ -69,25 +69,25 @@ var_dict= {
     'lefteye_yaw_polyfit_b1': 1.6,
     'righteye_yaw_polyfit_b1': 1.7,
 
-    'neck_pitch_rot_r': 0,
+    # 'neck_pitch_rot_r': 0,
 
-    'torso_origin_x': 0.0325,
-    'torso_origin_y': -0.05692,
-    'torso_origin_z': -0.12234,
-    'head_pitch_origin_z': 0.13172,
+    # 'torso_origin_x': 0.0325,
+    # 'torso_origin_y': -0.05692,
+    # 'torso_origin_z': -0.12234,
+    # 'head_pitch_origin_z': 0.13172,
     
-    'eyes_pitch_origin_x': 0.08492,
-    'eyes_pitch_origin_z': 0.05186,
-    'lefteye_yaw_origin_y': 0.02895,
-    # 'righteye_yaw_origin_y': -0.02895,
-    'lefteye_cam_origin_x': 0.015,
-    'righteye_cam_origin_x': 0.015,
+    # 'eyes_pitch_origin_x': 0.08492,
+    # 'eyes_pitch_origin_z': 0.05186,
+    # 'lefteye_yaw_origin_y': 0.02895,
+    # # 'righteye_yaw_origin_y': -0.02895,
+    # 'lefteye_cam_origin_x': 0.015,
+    # 'righteye_cam_origin_x': 0.015,
 
-    'lefteye_cam_rot_r': -1.5362233798559841,
-    'lefteye_cam_rot_y': -1.3816620298291191,
+    # 'lefteye_cam_rot_r': -1.5362233798559841,
+    # 'lefteye_cam_rot_y': -1.3816620298291191,
 
-    'righteye_cam_rot_r': -1.5152648840678353,
-    'righteye_cam_rot_y': -1.8252206094843146,
+    # 'righteye_cam_rot_r': -1.5152648840678353,
+    # 'righteye_cam_rot_y': -1.8252206094843146,
 
 }
 
@@ -204,37 +204,37 @@ def objective_function(V, x_c_l, y_c_l, z_c_l, x_c_r, y_c_r, z_c_r,
     # righteye_yaw = cmd_rep @ torch.Tensor([1.7]).to(dtype=dtype, device=device)
 
 
-    # URDF Variable Assignment
-    for joint in robot.joints:
-        if joint.name == 'torso':
-            joint.origin.position[0] = V[var2idx['torso_origin_x']]
-            joint.origin.position[1] = V[var2idx['torso_origin_y']]
-            joint.origin.position[2] = V[var2idx['torso_origin_z']]
-        elif joint.name == 'neck_pitch':
-            joint.origin.rotation[0] = V[var2idx['neck_pitch_rot_r']]
-        elif joint.name == 'head_pitch':
-            joint.origin.position[2] = V[var2idx['head_pitch_origin_z']]
-            # joint.origin.rotation[0] = V[29]
-            # joint.origin.rotation[2] = V[30]
-        elif joint.name == 'eyes_pitch':
-            joint.origin.position[0] = V[var2idx['eyes_pitch_origin_x']]
-            joint.origin.position[2] = V[var2idx['eyes_pitch_origin_z']]
-            # joint.origin.rotation[0] = V[33]
-            # joint.origin.rotation[2] = V[34]
-        elif joint.name == 'lefteye_yaw':
-            joint.origin.position[1] = V[var2idx['lefteye_yaw_origin_y']]
-        elif joint.name == 'righteye_yaw':
-            joint.origin.position[1] = -V[var2idx['lefteye_yaw_origin_y']]
-        elif joint.name == 'lefteye_cam':
-            joint.origin.position[0] = V[var2idx['lefteye_cam_origin_x']]
-            joint.origin.rotation[0] = V[var2idx['lefteye_cam_rot_r']]
-            # joint.origin.rotation[1] = V[var2idx['lefteye_cam_rot_p']]
-            joint.origin.rotation[2] = V[var2idx['lefteye_cam_rot_y']]
-        elif joint.name == 'righteye_cam':
-            joint.origin.position[0] = V[var2idx['righteye_cam_origin_x']]
-            joint.origin.rotation[0] = V[var2idx['righteye_cam_rot_r']]
-            # joint.origin.rotation[1] = V[var2idx['righteye_cam_rot_p']]
-            joint.origin.rotation[2] = V[var2idx['righteye_cam_rot_y']]
+    # # URDF Variable Assignment
+    # for joint in robot.joints:
+    #     if joint.name == 'torso':
+    #         joint.origin.position[0] = V[var2idx['torso_origin_x']]
+    #         joint.origin.position[1] = V[var2idx['torso_origin_y']]
+    #         joint.origin.position[2] = V[var2idx['torso_origin_z']]
+    #     elif joint.name == 'neck_pitch':
+    #         joint.origin.rotation[0] = V[var2idx['neck_pitch_rot_r']]
+    #     elif joint.name == 'head_pitch':
+    #         joint.origin.position[2] = V[var2idx['head_pitch_origin_z']]
+    #         # joint.origin.rotation[0] = V[29]
+    #         # joint.origin.rotation[2] = V[30]
+    #     elif joint.name == 'eyes_pitch':
+    #         joint.origin.position[0] = V[var2idx['eyes_pitch_origin_x']]
+    #         joint.origin.position[2] = V[var2idx['eyes_pitch_origin_z']]
+    #         # joint.origin.rotation[0] = V[33]
+    #         # joint.origin.rotation[2] = V[34]
+    #     elif joint.name == 'lefteye_yaw':
+    #         joint.origin.position[1] = V[var2idx['lefteye_yaw_origin_y']]
+    #     elif joint.name == 'righteye_yaw':
+    #         joint.origin.position[1] = -V[var2idx['lefteye_yaw_origin_y']]
+    #     elif joint.name == 'lefteye_cam':
+    #         joint.origin.position[0] = V[var2idx['lefteye_cam_origin_x']]
+    #         joint.origin.rotation[0] = V[var2idx['lefteye_cam_rot_r']]
+    #         # joint.origin.rotation[1] = V[var2idx['lefteye_cam_rot_p']]
+    #         joint.origin.rotation[2] = V[var2idx['lefteye_cam_rot_y']]
+    #     elif joint.name == 'righteye_cam':
+    #         joint.origin.position[0] = V[var2idx['righteye_cam_origin_x']]
+    #         joint.origin.rotation[0] = V[var2idx['righteye_cam_rot_r']]
+    #         # joint.origin.rotation[1] = V[var2idx['righteye_cam_rot_p']]
+    #         joint.origin.rotation[2] = V[var2idx['righteye_cam_rot_y']]
 
 
     # # # URDF Variable Assignment
@@ -324,7 +324,7 @@ def objective_function(V, x_c_l, y_c_l, z_c_l, x_c_r, y_c_r, z_c_r,
     return residuals
 
 
-def main(data_dir="final", csv_fn="241003_075m_grace_dataset.csv"):
+def main(amount,data_dir="final", csv_fn="241003_075m_grace_dataset.csv"):
     # Load Dataset CSV
     csv_file = os.path.join(os.path.dirname(os.path.abspath(__file__)),"..","data", data_dir, csv_fn)
     temp_df = pd.read_csv(csv_file)
@@ -383,13 +383,14 @@ def main(data_dir="final", csv_fn="241003_075m_grace_dataset.csv"):
                                                  options={"disp":True},
                                                  bounds=((-1,1),(-1,1),(-1,1),(-1,1),(-1,1),(-1,1),
                                                          (0,4),(0,4),(0,4), (0,4),(0,4),(0,4),
-                                                         (-1,1),
-                                                         (0,1),(-1,0),(-1,0),(0,1),
-                                                         (0,1),(0,1),
-                                                         (0,0.05),
-                                                         # (-0.05,0),
-                                                         (0,0.05),(0,0.05),
-                                                         (-3.1416,0),(-3.1416,0),(-3.1416,0),(-3.1416,0),)
+                                                        #  (-1,1),
+                                                        #  (0,1),(-1,0),(-1,0),(0,1),
+                                                        #  (0,1),(0,1),
+                                                        #  (0,0.05),
+                                                        #  # (-0.05,0),
+                                                        #  (0,0.05),(0,0.05),
+                                                        #  (-3.1416,0),(-3.1416,0),(-3.1416,0),(-3.1416,0),
+                                                         )
                                                 )
     
     
@@ -398,43 +399,43 @@ def main(data_dir="final", csv_fn="241003_075m_grace_dataset.csv"):
     # Saving URDF Results
     V = opt.x
 
-    for joint in robot.joints:
-        if joint.name == 'torso':
-            joint.origin.position[0] = V[var2idx['torso_origin_x']]
-            joint.origin.position[1] = V[var2idx['torso_origin_y']]
-            joint.origin.position[2] = V[var2idx['torso_origin_z']]
-        elif joint.name == 'neck_pitch':
-            joint.origin.rotation[0] = V[var2idx['neck_pitch_rot_r']]
-        elif joint.name == 'head_pitch':
-            joint.origin.position[2] = V[var2idx['head_pitch_origin_z']]
-            # joint.origin.rotation[0] = V[29]
-            # joint.origin.rotation[2] = V[30]
-        elif joint.name == 'eyes_pitch':
-            joint.origin.position[0] = V[var2idx['eyes_pitch_origin_x']]
-            joint.origin.position[2] = V[var2idx['eyes_pitch_origin_z']]
-            # joint.origin.rotation[0] = V[33]
-            # joint.origin.rotation[2] = V[34]
-        elif joint.name == 'lefteye_yaw':
-            joint.origin.position[1] = V[var2idx['lefteye_yaw_origin_y']]
-        elif joint.name == 'righteye_yaw':
-            joint.origin.position[1] = -V[var2idx['lefteye_yaw_origin_y']]
-        elif joint.name == 'lefteye_cam':
-            joint.origin.position[0] = V[var2idx['lefteye_cam_origin_x']]
-            joint.origin.rotation[0] = V[var2idx['lefteye_cam_rot_r']]
-            # joint.origin.rotation[1] = V[var2idx['lefteye_cam_rot_p']]
-            joint.origin.rotation[2] = V[var2idx['lefteye_cam_rot_y']]
-        elif joint.name == 'righteye_cam':
-            joint.origin.position[0] = V[var2idx['righteye_cam_origin_x']]
-            joint.origin.rotation[0] = V[var2idx['righteye_cam_rot_r']]
-            # joint.origin.rotation[1] = V[var2idx['righteye_cam_rot_p']]
-            joint.origin.rotation[2] = V[var2idx['righteye_cam_rot_y']]
+    # for joint in robot.joints:
+    #     if joint.name == 'torso':
+    #         joint.origin.position[0] = V[var2idx['torso_origin_x']]
+    #         joint.origin.position[1] = V[var2idx['torso_origin_y']]
+    #         joint.origin.position[2] = V[var2idx['torso_origin_z']]
+    #     elif joint.name == 'neck_pitch':
+    #         joint.origin.rotation[0] = V[var2idx['neck_pitch_rot_r']]
+    #     elif joint.name == 'head_pitch':
+    #         joint.origin.position[2] = V[var2idx['head_pitch_origin_z']]
+    #         # joint.origin.rotation[0] = V[29]
+    #         # joint.origin.rotation[2] = V[30]
+    #     elif joint.name == 'eyes_pitch':
+    #         joint.origin.position[0] = V[var2idx['eyes_pitch_origin_x']]
+    #         joint.origin.position[2] = V[var2idx['eyes_pitch_origin_z']]
+    #         # joint.origin.rotation[0] = V[33]
+    #         # joint.origin.rotation[2] = V[34]
+    #     elif joint.name == 'lefteye_yaw':
+    #         joint.origin.position[1] = V[var2idx['lefteye_yaw_origin_y']]
+    #     elif joint.name == 'righteye_yaw':
+    #         joint.origin.position[1] = -V[var2idx['lefteye_yaw_origin_y']]
+    #     elif joint.name == 'lefteye_cam':
+    #         joint.origin.position[0] = V[var2idx['lefteye_cam_origin_x']]
+    #         joint.origin.rotation[0] = V[var2idx['lefteye_cam_rot_r']]
+    #         # joint.origin.rotation[1] = V[var2idx['lefteye_cam_rot_p']]
+    #         joint.origin.rotation[2] = V[var2idx['lefteye_cam_rot_y']]
+    #     elif joint.name == 'righteye_cam':
+    #         joint.origin.position[0] = V[var2idx['righteye_cam_origin_x']]
+    #         joint.origin.rotation[0] = V[var2idx['righteye_cam_rot_r']]
+    #         # joint.origin.rotation[1] = V[var2idx['righteye_cam_rot_p']]
+    #         joint.origin.rotation[2] = V[var2idx['righteye_cam_rot_y']]
 
-    # Write the XML string to a .urdf file
-    urdf_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..','urdf', '075m_grace_results.urdf')
-    results_str = robot.to_xml_string()
-    with open(urdf_path, 'w') as file:
-        file.write(results_str)
-    print(f"XML string saved to {urdf_path}")
+    # # Write the XML string to a .urdf file
+    # urdf_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..','urdf', '075m_grace_results.urdf')
+    # results_str = robot.to_xml_string()
+    # with open(urdf_path, 'w') as file:
+    #     file.write(results_str)
+    # print(f"XML string saved to {urdf_path}")
 
     # Print and save the results to csv
     res_df = pd.DataFrame({
@@ -444,13 +445,21 @@ def main(data_dir="final", csv_fn="241003_075m_grace_dataset.csv"):
     res_df.index = var_names_list
     print(res_df)
     res_fn = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
-    res_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..','results', res_fn+'_075m_grace_results.csv')
+    res_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..','results', 'thesis',res_fn+'_'+amount+'_075m_grace_frozen_results.csv')
     res_df.to_csv(res_path)
     print(f"CSV results saved to {res_path}")
 
 
 if __name__ == '__main__':
     start = time.time()
-    main("final","241003_075m_grace_dataset.csv")
+    main("50","thesis","241005_075m_grace_dataset_50.csv")
+    main("100","thesis","241005_075m_grace_dataset_100.csv")
+    main("500","thesis","241005_075m_grace_dataset_500.csv")
+    main("1000","thesis","241005_075m_grace_dataset_1000.csv")
+    main("5000","thesis","241005_075m_grace_dataset_5000.csv")
+    main("10000","thesis","241005_075m_grace_dataset_10000.csv")
+    main("30000","thesis","241005_075m_grace_dataset_30000.csv")
+    main("50000","thesis","241005_075m_grace_dataset_50000.csv")
+    main("71552","thesis","241003_075m_grace_dataset.csv")
     end = time.time()
     print('Elapsed Time (sec):',end-start)

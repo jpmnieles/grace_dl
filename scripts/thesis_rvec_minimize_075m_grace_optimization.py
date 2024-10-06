@@ -324,7 +324,7 @@ def objective_function(V, x_c_l, y_c_l, z_c_l, x_c_r, y_c_r, z_c_r,
     return residuals
 
 
-def main(data_dir="final", csv_fn="241003_075m_grace_dataset.csv"):
+def main(amount, data_dir="final", csv_fn="241003_075m_grace_dataset.csv"):
     # Load Dataset CSV
     csv_file = os.path.join(os.path.dirname(os.path.abspath(__file__)),"..","data", data_dir, csv_fn)
     temp_df = pd.read_csv(csv_file)
@@ -444,13 +444,21 @@ def main(data_dir="final", csv_fn="241003_075m_grace_dataset.csv"):
     res_df.index = var_names_list
     print(res_df)
     res_fn = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
-    res_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..','results', res_fn+'_075m_grace_results.csv')
+    res_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..','results', 'thesis', res_fn +'_'+amount+'_075m_grace_results.csv')
     res_df.to_csv(res_path)
     print(f"CSV results saved to {res_path}")
 
 
 if __name__ == '__main__':
     start = time.time()
-    main("final","241003_075m_grace_dataset.csv")
+    main("50","thesis","241005_075m_grace_dataset_50.csv")
+    main("100","thesis","241005_075m_grace_dataset_100.csv")
+    main("500","thesis","241005_075m_grace_dataset_500.csv")
+    main("1000","thesis","241005_075m_grace_dataset_1000.csv")
+    main("5000","thesis","241005_075m_grace_dataset_5000.csv")
+    main("10000","thesis","241005_075m_grace_dataset_10000.csv")
+    main("30000","thesis","241005_075m_grace_dataset_30000.csv")
+    main("50000","thesis","241005_075m_grace_dataset_50000.csv")
+    main("71552","thesis","241003_075m_grace_dataset.csv")
     end = time.time()
     print('Elapsed Time (sec):',end-start)

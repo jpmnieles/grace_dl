@@ -383,7 +383,7 @@ def main():
                                                  cmd_lnt, cmd_lnp, cmd_unt, cmd_et, cmd_lep, cmd_rep,
                                                  l_rvec, l_tvec, r_rvec, r_tvec), 
                                                  method="Powell", 
-                                                 options={"disp":True, "xtol":1e-8, "ftol":1e-8},
+                                                 options={"disp":True},
                                                  bounds=((-1,1),(-1,1),(-1,1),(-1,1),(-1,1),(-1,1),
                                                          (0,4),(0,4),(0,4), (0,4),(0,4),(0,4),
                                                          (-1,1),
