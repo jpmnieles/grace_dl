@@ -341,15 +341,15 @@ def objective_function(V, cmd_lnt, cmd_lnp, cmd_unt, cmd_et, cmd_lep,
     pred_l_tvec = T_final[:,:3,3]
 
     # Min-max normalization
-    min_val = min([pred_l_tvec.min(),l_tvec_t.min()])
-    max_val = max([pred_l_tvec.max(),l_tvec_t.max()])
+    min_val = -0.1571
+    max_val = 1.0143
 
     # Normalized Tvec
     norm_l_tvec_t = (l_rvec_t - min_val) / (max_val - min_val)
     norm_pred_l_tvec = (pred_l_tvec - min_val) / (max_val - min_val)
 
     # Loss
-    residuals = (mse_loss(pred_l_rvec, l_rvec_t) + mse_loss(norm_l_tvec_t, norm_pred_l_tvec)).cpu().item()
+    residuals = (torch.sqrt(mse_loss(pred_l_rvec, l_rvec_t)) + torch.sqrt(mse_loss(pred_l_tvec, l_tvec_t))).cpu().item()
     residuals
 
     # Return Loss
