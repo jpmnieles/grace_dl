@@ -1,4 +1,4 @@
-_target_: src.data.depth_exp_datamodule.GraceDataModule
+_target_: src.data.butterfly_datamodule.GraceDataModule
 data_dir: "/home/jaynieles/dev/grace_dl/data/thesis/241003_075m_grace_dataset.csv"
 val_size: 0.3
 batch_size: 128 # Needs to be divisible by the number of devices (e.g., if in a distributed setup)

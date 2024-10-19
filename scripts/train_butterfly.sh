@@ -1,0 +1,1 @@
+ python src/train.py task_name=initial_butterfly model.net.hidden_size1=[512,128] model.net.hidden_size2=[512,128] data.batch_size=128 trainer.max_epochs=100 logger=tensorboard tags=["Initial","latent_size4"]
