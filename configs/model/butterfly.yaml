@@ -10,14 +10,14 @@ net:
   _target_: src.models.components.butterfly_net.ButterflyNet
   input_size1: 12
   hidden_size1:
-    - 128
-    - 64
+    - 512
+    - 256
   output_size1: 12
   latent_size: 6
   input_size2: 12
   hidden_size2:
-    - 128
-    - 64
+    - 512
+    - 256
   output_size2: 12
   dropout: 0.5
   
@@ -26,4 +26,4 @@ net:
 compile: false
 
 # latent loss epsilon
-epsilon: 0.5
+epsilon: 0.15

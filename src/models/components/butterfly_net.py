@@ -88,7 +88,7 @@ class ButterflyNet(nn.Module):
         :param x: The input tensor.
         :return: A tensor of predictions.
         """
-        batch_size, features = x.size()
+        # batch_size, features = x.size()
         x1 = x[:,:12]
         x2 = x[:,12:]
 
