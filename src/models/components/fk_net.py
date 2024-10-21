@@ -8,9 +8,9 @@ class FKNet(nn.Module):
     def __init__(
         self,
         input_size: int = 12,
-        hidden_size1: list = [256,128,64,32,16],
+        hidden_size1: list = [8],
         latent_size: int = 6,
-        hidden_size2: list = [16,32,64,128,256],
+        hidden_size2: list = [512,512],
         output_size: int = 12,
         dropout = 0.5
     ) -> None:
@@ -27,27 +27,26 @@ class FKNet(nn.Module):
         # Encoder1
         layers = []
         layers.append(nn.Linear(input_size, hidden_size1[0]))
-        layers.append(nn.ReLU())
+        layers.append(nn.LeakyReLU())
         layers.append(nn.Dropout(dropout))
         if len(hidden_size1) > 1:
             for i in range(len(hidden_size1)-1):
                 layers.append(nn.Linear(hidden_size1[i], hidden_size1[i+1]))
-                layers.append(nn.ReLU())
+                layers.append(nn.LeakyReLU())
                 layers.append(nn.Dropout(dropout))
         layers.append(nn.Linear(hidden_size1[-1], latent_size))
-        layers.append(nn.ReLU())
-        layers.append(nn.Dropout(dropout))
+        layers.append(nn.LeakyReLU())
         self.encoder = nn.Sequential(*layers)
 
         # Encoder2
         layers = []
         layers.append(nn.Linear(latent_size, hidden_size2[0]))
-        layers.append(nn.ReLU())
+        layers.append(nn.LeakyReLU())
         layers.append(nn.Dropout(dropout))
         if len(hidden_size2) > 1:
             for i in range(len(hidden_size2)-1):
                 layers.append(nn.Linear(hidden_size2[i], hidden_size2[i+1]))
-                layers.append(nn.ReLU())
+                layers.append(nn.LeakyReLU())
                 layers.append(nn.Dropout(dropout))
         layers.append(nn.Linear(hidden_size2[-1], output_size))
         self.decoder = nn.Sequential(*layers)

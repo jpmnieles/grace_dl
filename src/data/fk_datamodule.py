@@ -152,8 +152,8 @@ class GraceDataModule(LightningDataModule):
             scaled_df[col] = 2 * (data_df[col] - col_min) / (col_max - col_min) - 1
 
         # Separation of Training and Validation Set
-        train_df, temp_df = train_test_split(scaled_df, test_size=self.val_size, random_state=42)
-        val_df, test_df = train_test_split(temp_df, test_size=1/3, random_state=42)
+        train_df, temp_df = train_test_split(scaled_df, test_size=self.val_size, random_state=None)
+        val_df, test_df = train_test_split(temp_df, test_size=1/3, random_state=None)
 
         # Training Set
         X_train = torch.tensor(train_df.iloc[:,:12].values, dtype=torch.float32)
