@@ -14,6 +14,7 @@ from src.models.components.reconlatent_loss import ReconLatentLoss
 
 MAX_METER_VALUE = 1.5
 MAX_DEG_VALUE = 44
+MAX_RVEC_VALUE = 1.5708
 
 
 class GraceLitModule(LightningModule):
@@ -234,28 +235,28 @@ class GraceLitModule(LightningModule):
             'cmd_lep_t': MAX_DEG_VALUE*inputs_arr[:,10],
             'cmd_rep_t': MAX_DEG_VALUE*inputs_arr[:,11],
             
-            'target_l_rvec_0': targets_arr[:,0],
-            'target_l_rvec_1': targets_arr[:,1],
-            'target_l_rvec_2': targets_arr[:,2],
+            'target_l_rvec_0': MAX_RVEC_VALUE*targets_arr[:,0],
+            'target_l_rvec_1': MAX_RVEC_VALUE*targets_arr[:,1],
+            'target_l_rvec_2': MAX_RVEC_VALUE*targets_arr[:,2],
             'target_l_tvec_0': MAX_METER_VALUE*targets_arr[:,3],
             'target_l_tvec_1': MAX_METER_VALUE*targets_arr[:,4],
             'target_l_tvec_2': MAX_METER_VALUE*targets_arr[:,5],
-            'target_r_rvec_0': targets_arr[:,6],
-            'target_r_rvec_1': targets_arr[:,7],
-            'target_r_rvec_2': targets_arr[:,8],
+            'target_r_rvec_0': MAX_RVEC_VALUE*targets_arr[:,6],
+            'target_r_rvec_1': MAX_RVEC_VALUE*targets_arr[:,7],
+            'target_r_rvec_2': MAX_RVEC_VALUE*targets_arr[:,8],
             'target_r_tvec_0': MAX_METER_VALUE*targets_arr[:,9],
             'target_r_tvec_1': MAX_METER_VALUE*targets_arr[:,10],
             'target_r_tvec_2': MAX_METER_VALUE*targets_arr[:,11],
             
-            'pred_l_rvec_0': preds_arr[:,0],
-            'pred_l_rvec_1': preds_arr[:,1],
-            'pred_l_rvec_2': preds_arr[:,2],
+            'pred_l_rvec_0': MAX_RVEC_VALUE*preds_arr[:,0],
+            'pred_l_rvec_1': MAX_RVEC_VALUE*preds_arr[:,1],
+            'pred_l_rvec_2': MAX_RVEC_VALUE*preds_arr[:,2],
             'pred_l_tvec_0': MAX_METER_VALUE*preds_arr[:,3],
             'pred_l_tvec_1': MAX_METER_VALUE*preds_arr[:,4],
             'pred_l_tvec_2': MAX_METER_VALUE*preds_arr[:,5],
-            'pred_r_rvec_0': preds_arr[:,6],
-            'pred_r_rvec_1': preds_arr[:,7],
-            'pred_r_rvec_2': preds_arr[:,8],
+            'pred_r_rvec_0': MAX_RVEC_VALUE*preds_arr[:,6],
+            'pred_r_rvec_1': MAX_RVEC_VALUE*preds_arr[:,7],
+            'pred_r_rvec_2': MAX_RVEC_VALUE*preds_arr[:,8],
             'pred_r_tvec_0': MAX_METER_VALUE*preds_arr[:,9],
             'pred_r_tvec_1': MAX_METER_VALUE*preds_arr[:,10],
             'pred_r_tvec_2': MAX_METER_VALUE*preds_arr[:,11],
@@ -268,7 +269,7 @@ class GraceLitModule(LightningModule):
         df['delta_l_tvec_0'] = df['target_l_tvec_0'].values - df['pred_l_tvec_0'].values
         df['delta_l_tvec_1'] = df['target_l_tvec_1'].values - df['pred_l_tvec_1'].values
         df['delta_l_tvec_2'] = df['target_l_tvec_2'].values - df['pred_l_tvec_2'].values
-        df['delta_r_rvec_0'] = df['target_r_rvec_0'].values - df['pred_l_rvec_0'].values
+        df['delta_r_rvec_0'] = df['target_r_rvec_0'].values - df['pred_r_rvec_0'].values
         df['delta_r_rvec_1'] = df['target_r_rvec_1'].values - df['pred_r_rvec_1'].values
         df['delta_r_rvec_2'] = df['target_r_rvec_2'].values - df['pred_r_rvec_2'].values
         df['delta_r_tvec_0'] = df['target_r_tvec_0'].values - df['pred_r_tvec_0'].values
